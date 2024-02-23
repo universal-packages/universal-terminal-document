@@ -4,7 +4,7 @@ import ansiScapes from 'ansi-escapes'
 import chalk from 'chalk'
 import terminalSize from 'term-size'
 
-import { BLENDS, BORDERS, BOTTOM_JOIN_BORDERS_LIST, BOTTOM_LEFT_BORDERS_LIST, BOTTOM_RIGHT_BORDERS_LIST, VERTICAL_INFER_MAP } from './borders'
+import { BLENDS, BORDERS, VERTICAL_BORDERS, VERTICAL_INFER_MAP } from './borders'
 import { COLORS } from './colors'
 import {
   BlockDescriptor,
@@ -205,30 +205,25 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = -1; i < previousWrappedBlocks?.length || 0; i++) {
         const leftBlock = previousWrappedBlocks?.[i]
         const rightBlock = previousWrappedBlocks?.[i + 1]
-        const leftBorder = leftBlock?.block.border
-        const rightBorder = rightBlock?.block.border
-        const leftBorderStyle = leftBlock?.block.borderStyle as SelectiveBorderStyle
-        const leftBottomBorderDescriptor = BORDERS[leftBorderStyle?.[2]]
-        const rightBorderStyle = rightBlock?.block.borderStyle as SelectiveBorderStyle
-        const rightBottomBorderDescriptor = BORDERS[rightBorderStyle?.[2]]
+        const verticalBorder = VERTICAL_BORDERS[rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]]
 
         borderIndex += leftBlock?.width || 0
 
-        if (leftBorder?.[1] || rightBorder[3]) {
-          const verticalBorder = BORDERS[rightBorderStyle?.[3] || leftBorderStyle?.[1]].vertical
-          const leftHorizontalBorder = leftBottomBorderDescriptor?.horizontal
-          const rightHorizontalBorder = rightBottomBorderDescriptor?.horizontal
-          const horizontalBorder = leftHorizontalBorder || rightHorizontalBorder
+        if (verticalBorder) {
+          const leftBorderChar = border[borderIndex - 1]?.replace(' ', '')
+          const rightBorderChar = border[borderIndex + 1]?.replace(' ', '')
+          const horizontalBorder = leftBorderChar || rightBorderChar
 
-          if (!leftBorder?.[2] && rightBorder[2]) {
+          if (!leftBorderChar && rightBorderChar) {
             border[borderIndex] = BLENDS['bottom-left'][verticalBorder][horizontalBorder]
-          } else if (leftBorder?.[2] && !rightBorder?.[2]) {
+          } else if (leftBorderChar && !rightBorderChar) {
             border[borderIndex] = BLENDS['bottom-right'][verticalBorder][horizontalBorder]
-          } else if (leftBorder?.[2] && rightBorder?.[2]) {
-            border[borderIndex] = BLENDS['bottom-join'][verticalBorder][leftHorizontalBorder][rightHorizontalBorder]
-          } else if (!leftBorder?.[2] && !rightBorder?.[2]) {
+          } else if (leftBorderChar && rightBorderChar) {
+            border[borderIndex] = BLENDS['bottom-join'][verticalBorder][leftBorderChar][rightBorderChar]
+          } else if (!leftBorderChar && rightBorderChar) {
             border[borderIndex] = verticalBorder
           }
+
           borderIndex++
         }
       }
@@ -238,41 +233,35 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = -1; i < wrappedBlocks?.length || 0; i++) {
         const leftBlock = wrappedBlocks?.[i]
         const rightBlock = wrappedBlocks?.[i + 1]
-        const leftBorder = leftBlock?.block.border
-        const rightBorder = rightBlock?.block.border
-        const leftBorderStyle = leftBlock?.block.borderStyle as SelectiveBorderStyle
-        const leftTopBorderDescriptor = BORDERS[leftBorderStyle?.[0]]
-        const rightBorderStyle = rightBlock?.block.borderStyle as SelectiveBorderStyle
-        const rightTopBorderDescriptor = BORDERS[rightBorderStyle?.[0]]
+        const verticalBorder = VERTICAL_BORDERS[rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]]
 
         borderIndex += leftBlock?.width || 0
 
-        if (leftBorder?.[1] || rightBorder[3]) {
-          const verticalBorder = BORDERS[rightBorderStyle?.[3] || leftBorderStyle?.[1]].vertical
-          const leftHorizontalBorder = leftTopBorderDescriptor?.horizontal
-          const rightHorizontalBorder = rightTopBorderDescriptor?.horizontal
-          const horizontalBorder = leftHorizontalBorder || rightHorizontalBorder
+        if (verticalBorder) {
+          const leftBorderChar = border[borderIndex - 1]?.replace(' ', '')
+          const rightBorderChar = border[borderIndex + 1]?.replace(' ', '')
+          const horizontalBorder = leftBorderChar || rightBorderChar
           const aboveVerticalBorder = VERTICAL_INFER_MAP[border[borderIndex]]
 
-          if (!leftBorder?.[0] && rightBorder[0]) {
+          if (!leftBorderChar && rightBorderChar) {
             if (aboveVerticalBorder) {
               border[borderIndex] = BLENDS['left-join'][aboveVerticalBorder][verticalBorder][horizontalBorder]
             } else {
               border[borderIndex] = BLENDS['top-left'][verticalBorder][horizontalBorder]
             }
-          } else if (leftBorder?.[0] && !rightBorder?.[0]) {
+          } else if (leftBorderChar && !rightBorderChar) {
             if (aboveVerticalBorder) {
               border[borderIndex] = BLENDS['right-join'][aboveVerticalBorder][verticalBorder][horizontalBorder]
             } else {
               border[borderIndex] = BLENDS['top-right'][verticalBorder][horizontalBorder]
             }
-          } else if (leftBorder?.[0] && rightBorder?.[0]) {
+          } else if (leftBorderChar && rightBorderChar) {
             if (aboveVerticalBorder) {
-              border[borderIndex] = BLENDS['join'][aboveVerticalBorder][verticalBorder][leftHorizontalBorder][rightHorizontalBorder]
+              border[borderIndex] = BLENDS['join'][aboveVerticalBorder][verticalBorder][leftBorderChar][rightBorderChar]
             } else {
-              border[borderIndex] = BLENDS['top-join'][verticalBorder][leftHorizontalBorder][rightHorizontalBorder]
+              border[borderIndex] = BLENDS['top-join'][verticalBorder][leftBorderChar][rightBorderChar]
             }
-          } else if (!leftBorder?.[0] && !rightBorder?.[0]) {
+          } else if (!leftBorderChar && !rightBorderChar) {
             border[borderIndex] = verticalBorder
           }
 

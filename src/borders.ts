@@ -55,6 +55,13 @@ export const BORDERS: Record<BorderType, BorderDescriptor> = {
   }
 }
 
+export const VERTICAL_BORDERS: Record<BorderType, string> = {
+  single: '│',
+  'single-round': '│',
+  thick: '┃',
+  double: '║'
+}
+
 export const BLENDS = {
   'bottom-left': {
     '│': {
@@ -215,18 +222,18 @@ export const BLENDS = {
     '║': {
       '─': {
         '─': '╥',
-        '━': '╤',
-        '═': '╤'
+        '━': '╦',
+        '═': '╦'
       },
       '━': {
-        '─': '╤',
-        '━': '╤',
-        '═': '╤'
+        '─': '╦',
+        '━': '╦',
+        '═': '╦'
       },
       '═': {
-        '─': '╥',
-        '━': '╤',
-        '═': '╤'
+        '─': '╦',
+        '━': '╦',
+        '═': '╦'
       }
     }
   },
@@ -532,7 +539,3 @@ export const VERTICAL_INFER_MAP = {
   '┃': '┃',
   '║': '║'
 }
-
-export const BOTTOM_JOIN_BORDERS_LIST = ['┴', '┷', '┻', '╩']
-export const BOTTOM_LEFT_BORDERS_LIST = ['└', '╰', '┗', '╚']
-export const BOTTOM_RIGHT_BORDERS_LIST = ['┘', '╯', '┛', '╝']

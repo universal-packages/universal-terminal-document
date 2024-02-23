@@ -28,7 +28,3 @@ The development of this library happens in the open on GitHub, and we are gratef
 ### License
 
 [MIT licensed](./LICENSE).
-
-```
-
-```
