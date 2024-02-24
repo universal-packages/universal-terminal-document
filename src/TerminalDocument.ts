@@ -4,7 +4,21 @@ import ansiScapes from 'ansi-escapes'
 import chalk from 'chalk'
 import terminalSize from 'term-size'
 
-import { BLENDS, BORDERS, VERTICAL_BORDERS, VERTICAL_INFER_MAP } from './borders'
+import {
+  BOTTOM_JOIN,
+  BOTTOM_LEFT_CORNER,
+  BOTTOM_RIGHT_CORNER,
+  HORIZONTAL_BORDERS,
+  INVERSE_HORIZONTAL_BORDERS,
+  JOIN,
+  LEFT_JOIN,
+  RIGHT_JOIN,
+  TOP_JOIN,
+  TOP_LEFT_CORNER,
+  TOP_RIGHT_CORNER,
+  VERTICAL_BORDERS,
+  VERTICAL_INFER_MAP
+} from './borders'
 import { COLORS } from './colors'
 import {
   BlockDescriptor,
@@ -57,10 +71,12 @@ export default class TerminalDocument extends EventEmitter {
         const previousWrappedBlocks = wrappedBlocks[i - 1]
 
         this.internalOutput += this.generateBorderLine(currentWrappedBlocks, previousWrappedBlocks)
-        this.internalOutput += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n')
+        this.internalOutput += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n') + (i < wrappedBlocks.length - 1 ? '\n' : '')
       }
 
-      this.internalOutput += this.generateBorderLine(undefined, wrappedBlocks[wrappedBlocks.length - 1])
+      const lastBorderLine = this.generateBorderLine(undefined, wrappedBlocks[wrappedBlocks.length - 1])
+
+      this.internalOutput += lastBorderLine ? '\n' + lastBorderLine : ''
     }
   }
 
@@ -95,7 +111,7 @@ export default class TerminalDocument extends EventEmitter {
     const fitWidthTotal = wrappedBlocks.filter((wp) => wp.block.width === 'fit').reduce((acc, wb) => acc + synthesizeWrappedLine(wb.lines[0]).length, 0)
     const horizontalBorderWidth = this.getHorizontalBorderCountNeeded(rowBlocks)
     const dynamicWidthBlocksCount = rowBlocks.filter((b) => b.width === undefined).length
-    const remainingWidth = Math.max(this.documentWidth - fixedWidthTotal - fitWidthTotal - horizontalBorderWidth, dynamicWidthBlocksCount * DYNAMIC_BLOCK_MIN_WIDTH)
+    const remainingWidth = Math.max(this.documentWidth - fixedWidthTotal - fitWidthTotal - horizontalBorderWidth, 0) || dynamicWidthBlocksCount * DYNAMIC_BLOCK_MIN_WIDTH
     const dynamicWidth = Math.floor(remainingWidth / dynamicWidthBlocksCount)
     let dynamicWidthToGive = this.documentWidth - fixedWidthTotal - fitWidthTotal - horizontalBorderWidth - dynamicWidthBlocksCount * dynamicWidth
 
@@ -139,14 +155,14 @@ export default class TerminalDocument extends EventEmitter {
       for (let j = 0; j < currentWrappedBlock.lines.length; j++) {
         const currentWrappedLine = currentWrappedBlock.lines[j]
 
-        if ((i === 0 && currentWrappedBlock.block.border[3]) || previousWrappedBlock.block.border[1] || currentWrappedBlock.block.border[3]) {
-          lines[j] += BORDERS[currentWrappedBlock.block.borderStyle[3]].vertical
+        if ((i === 0 && currentWrappedBlock.block.border[3]) || previousWrappedBlock?.block.border[1] || currentWrappedBlock.block.border[3]) {
+          lines[j] += VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[3]]
         }
 
         lines[j] += this.synthesizeWrappedLine(currentWrappedLine, currentWrappedBlock.block)
 
         if (i === wrappedBlocks.length - 1 && currentWrappedBlock.block.border[1]) {
-          lines[j] += BORDERS[currentWrappedBlock.block.borderStyle[1]].vertical
+          lines[j] += VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]
         }
       }
     }
@@ -172,9 +188,8 @@ export default class TerminalDocument extends EventEmitter {
 
         if (leftBorder?.[2]) {
           const bottomBorderStyle = leftBlock.block.borderStyle as SelectiveBorderStyle
-          const bottomBorderDescriptor = BORDERS[bottomBorderStyle[2]]
 
-          border.splice(borderIndex, leftBlock.width, ...Array(leftBlock.width).fill(bottomBorderDescriptor.horizontal))
+          border.splice(borderIndex, leftBlock.width, ...Array(leftBlock.width).fill(HORIZONTAL_BORDERS[bottomBorderStyle[2]]))
         }
 
         borderIndex += leftBlock.width
@@ -192,9 +207,8 @@ export default class TerminalDocument extends EventEmitter {
 
         if (leftBorder?.[0]) {
           const topBorderStyle = leftBlock.block.borderStyle as SelectiveBorderStyle
-          const topBorderDescriptor = BORDERS[topBorderStyle[0]]
 
-          border.splice(borderIndex, leftBlock.width, ...Array(leftBlock.width).fill(topBorderDescriptor.horizontal))
+          border.splice(borderIndex, leftBlock.width, ...Array(leftBlock.width).fill(HORIZONTAL_BORDERS[topBorderStyle[0]]))
         }
 
         borderIndex += leftBlock.width
@@ -205,23 +219,26 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = -1; i < previousWrappedBlocks?.length || 0; i++) {
         const leftBlock = previousWrappedBlocks?.[i]
         const rightBlock = previousWrappedBlocks?.[i + 1]
-        const verticalBorder = VERTICAL_BORDERS[rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]]
+        const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
+        const verticalBorderChar = VERTICAL_BORDERS[verticalBorderStyle]
 
         borderIndex += leftBlock?.width || 0
 
-        if (verticalBorder) {
+        if (verticalBorderChar) {
           const leftBorderChar = border[borderIndex - 1]?.replace(' ', '')
           const rightBorderChar = border[borderIndex + 1]?.replace(' ', '')
-          const horizontalBorder = leftBorderChar || rightBorderChar
+          const leftBorderStyle = INVERSE_HORIZONTAL_BORDERS[leftBorderChar]
+          const rightBorderStyle = INVERSE_HORIZONTAL_BORDERS[rightBorderChar]
+          const horizontalBorderStyle = rightBorderStyle || leftBorderStyle
 
           if (!leftBorderChar && rightBorderChar) {
-            border[borderIndex] = BLENDS['bottom-left'][verticalBorder][horizontalBorder]
+            border[borderIndex] = BOTTOM_LEFT_CORNER[verticalBorderStyle][horizontalBorderStyle]
           } else if (leftBorderChar && !rightBorderChar) {
-            border[borderIndex] = BLENDS['bottom-right'][verticalBorder][horizontalBorder]
+            border[borderIndex] = BOTTOM_RIGHT_CORNER[verticalBorderStyle][horizontalBorderStyle]
           } else if (leftBorderChar && rightBorderChar) {
-            border[borderIndex] = BLENDS['bottom-join'][verticalBorder][leftBorderChar][rightBorderChar]
+            border[borderIndex] = BOTTOM_JOIN[verticalBorderStyle][leftBorderStyle][rightBorderStyle]
           } else if (!leftBorderChar && rightBorderChar) {
-            border[borderIndex] = verticalBorder
+            border[borderIndex] = verticalBorderChar
           }
 
           borderIndex++
@@ -233,36 +250,42 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = -1; i < wrappedBlocks?.length || 0; i++) {
         const leftBlock = wrappedBlocks?.[i]
         const rightBlock = wrappedBlocks?.[i + 1]
-        const verticalBorder = VERTICAL_BORDERS[rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]]
+        const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
+        const verticalBorderChar = VERTICAL_BORDERS[verticalBorderStyle]
 
         borderIndex += leftBlock?.width || 0
 
-        if (verticalBorder) {
+        if (verticalBorderChar) {
           const leftBorderChar = border[borderIndex - 1]?.replace(' ', '')
           const rightBorderChar = border[borderIndex + 1]?.replace(' ', '')
+          const leftBorderStyle = INVERSE_HORIZONTAL_BORDERS[leftBorderChar]
+          const rightBorderStyle = INVERSE_HORIZONTAL_BORDERS[rightBorderChar]
+          const horizontalBorderStyle = rightBorderStyle || leftBorderStyle
+
           const horizontalBorder = leftBorderChar || rightBorderChar
-          const aboveVerticalBorder = VERTICAL_INFER_MAP[border[borderIndex]]
+          const aboveVerticalBorderStyle = VERTICAL_INFER_MAP[border[borderIndex]]
+          const aboveVerticalBorder = VERTICAL_BORDERS[aboveVerticalBorderStyle]
 
           if (!leftBorderChar && rightBorderChar) {
             if (aboveVerticalBorder) {
-              border[borderIndex] = BLENDS['left-join'][aboveVerticalBorder][verticalBorder][horizontalBorder]
+              border[borderIndex] = LEFT_JOIN[aboveVerticalBorderStyle][verticalBorderStyle][horizontalBorderStyle]
             } else {
-              border[borderIndex] = BLENDS['top-left'][verticalBorder][horizontalBorder]
+              border[borderIndex] = TOP_LEFT_CORNER[verticalBorderStyle][horizontalBorderStyle]
             }
           } else if (leftBorderChar && !rightBorderChar) {
             if (aboveVerticalBorder) {
-              border[borderIndex] = BLENDS['right-join'][aboveVerticalBorder][verticalBorder][horizontalBorder]
+              border[borderIndex] = RIGHT_JOIN[aboveVerticalBorderStyle][verticalBorderStyle][horizontalBorderStyle]
             } else {
-              border[borderIndex] = BLENDS['top-right'][verticalBorder][horizontalBorder]
+              border[borderIndex] = TOP_RIGHT_CORNER[verticalBorderStyle][horizontalBorderStyle]
             }
           } else if (leftBorderChar && rightBorderChar) {
             if (aboveVerticalBorder) {
-              border[borderIndex] = BLENDS['join'][aboveVerticalBorder][verticalBorder][leftBorderChar][rightBorderChar]
+              border[borderIndex] = JOIN[aboveVerticalBorderStyle][verticalBorderStyle][leftBorderStyle][rightBorderStyle]
             } else {
-              border[borderIndex] = BLENDS['top-join'][verticalBorder][leftBorderChar][rightBorderChar]
+              border[borderIndex] = TOP_JOIN[verticalBorderStyle][leftBorderStyle][rightBorderStyle]
             }
           } else if (!leftBorderChar && !rightBorderChar) {
-            border[borderIndex] = verticalBorder
+            border[borderIndex] = verticalBorderChar
           }
 
           borderIndex++
