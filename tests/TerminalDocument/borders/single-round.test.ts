@@ -1,11 +1,11 @@
 import stripAnsi from 'strip-ansi'
 
 import { TerminalDocument } from '../../../src'
-import { quadDocument } from '../../__fixtures__/quad-document'
+import { quadDocument } from '../../__fixtures__/quadDocument'
 
 describe(TerminalDocument, (): void => {
   it('renders single-round borders', async (): Promise<void> => {
-    const terminalDocument = new TerminalDocument({ rows: quadDocument({ border: true, borderStyle: 'single-round' }), width: 20 })
+    const terminalDocument = new TerminalDocument(quadDocument({ border: true, borderStyle: 'single-round' }))
 
     terminalDocument.update()
 

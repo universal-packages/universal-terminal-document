@@ -1,6 +1,6 @@
 export const VERTICAL_BORDERS: Record<string, string> = {
   single: '│',
-  'single-round': '│',
+  'single-round': '1',
   thick: '┃',
   double: '║',
   'dash-2': '╎',
@@ -11,7 +11,20 @@ export const VERTICAL_BORDERS: Record<string, string> = {
   'dash-4-thick': '┋'
 }
 
-export const ANALOGOUS_VERTICAL_BORDERS: Record<string, string> = {
+export const VERTICAL_BORDERS_RECTIFICATION_MAP: Record<string, string> = {
+  '│': '│',
+  '1': '│',
+  '┃': '┃',
+  '║': '║',
+  '╎': '╎',
+  '╏': '╏',
+  '┆': '┆',
+  '┇': '┇',
+  '┊': '┊',
+  '┋': '┋'
+}
+
+export const VERTICAL_BORDERS_ANALOGOUS_MAP: Record<string, string> = {
   '│': '│',
   '1': '1',
   '┃': '┃',
@@ -37,7 +50,7 @@ export const HORIZONTAL_BORDERS: Record<string, string> = {
   'dash-4-thick': '┉'
 }
 
-export const ANALOGOUS_HORIZONTAL_BORDERS: Record<string, string> = {
+export const HORIZONTAL_BORDERS_ANALOGOUS_MAP: Record<string, string> = {
   '─': '─',
   '2': '2',
   '━': '━',
@@ -170,21 +183,21 @@ export const TOP_JOIN: Record<string, string> = {
 export const TOP_LEFT_CORNER: Record<string, string> = {
   '│─': '┌',
   '1─': '╭',
-  '┃─': '┍',
+  '┃─': '┎',
   '║─': '╔',
 
   '│2': '╭',
   '12': '╭',
-  '┃2': '╭',
+  '┃2': '┎',
   '║2': '╔',
 
-  '│━': '┍',
-  '1━': '┍',
+  '│━': '┌',
+  '1━': '╭',
   '┃━': '┏',
-  '║━': '┏',
+  '║━': '╔',
 
-  '│═': '╔',
-  '1═': '╔',
+  '│═': '┌',
+  '1═': '╭',
   '┃═': '┏',
   '║═': '╔'
 }

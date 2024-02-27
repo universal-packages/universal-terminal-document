@@ -5,11 +5,11 @@ import chalk from 'chalk'
 import terminalSize from 'term-size'
 
 import {
-  ANALOGOUS_HORIZONTAL_BORDERS,
   BOTTOM_JOIN,
   BOTTOM_LEFT_CORNER,
   BOTTOM_RIGHT_CORNER,
   HORIZONTAL_BORDERS,
+  HORIZONTAL_BORDERS_ANALOGOUS_MAP,
   JOIN,
   LEFT_JOIN,
   RIGHT_JOIN,
@@ -18,6 +18,8 @@ import {
   TOP_LEFT_CORNER,
   TOP_RIGHT_CORNER,
   VERTICAL_BORDERS,
+  VERTICAL_BORDERS_ANALOGOUS_MAP,
+  VERTICAL_BORDERS_RECTIFICATION_MAP,
   VERTICAL_INFER_MAP
 } from './borders'
 import { COLORS } from './colors'
@@ -157,13 +159,13 @@ export default class TerminalDocument extends EventEmitter {
         const currentWrappedLine = currentWrappedBlock.lines[j]
 
         if ((i === 0 && currentWrappedBlock.block.border[3]) || previousWrappedBlock?.block.border[1] || currentWrappedBlock.block.border[3]) {
-          lines[j] += VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[3]]
+          lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[3]]]
         }
 
         lines[j] += this.synthesizeWrappedLine(currentWrappedLine, currentWrappedBlock.block)
 
         if (i === wrappedBlocks.length - 1 && currentWrappedBlock.block.border[1]) {
-          lines[j] += VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]
+          lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]]
         }
       }
     }
@@ -248,39 +250,44 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = -1; i < wrappedBlocks?.length || 0; i++) {
         const leftBlock = wrappedBlocks?.[i]
         const rightBlock = wrappedBlocks?.[i + 1]
-        const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
-        const verticalBorderChar = VERTICAL_BORDERS[verticalBorderStyle]
+        const hasVerticalBorder = rightBlock?.block.border[3] || leftBlock?.block.border[1]
 
-        borderIndex += leftBlock?.width || 0
+        if (hasVerticalBorder) {
+          const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
+          const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
-        if (verticalBorderChar) {
-          const leftBorderChar = ANALOGOUS_HORIZONTAL_BORDERS[border[borderIndex - 1]]
-          const rightBorderChar = ANALOGOUS_HORIZONTAL_BORDERS[border[borderIndex + 1]]
-          const aboveVerticalBorderChar = VERTICAL_INFER_MAP[border[borderIndex]]
+          borderIndex += leftBlock?.width || 0
 
-          if (!leftBorderChar && rightBorderChar) {
-            if (aboveVerticalBorderChar) {
-              border[borderIndex] = LEFT_JOIN[aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
-            } else {
-              border[borderIndex] = TOP_LEFT_CORNER[verticalBorderChar + rightBorderChar]
+          if (verticalBorderChar) {
+            const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]]
+            const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]]
+            const aboveVerticalBorderChar = VERTICAL_INFER_MAP[border[borderIndex]]
+
+            if (!leftBorderChar && rightBorderChar) {
+              if (aboveVerticalBorderChar) {
+                border[borderIndex] = LEFT_JOIN[aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
+              } else {
+                border[borderIndex] = TOP_LEFT_CORNER[verticalBorderChar + rightBorderChar]
+              }
+            } else if (leftBorderChar && !rightBorderChar) {
+              if (aboveVerticalBorderChar) {
+                border[borderIndex] = RIGHT_JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar]
+              } else {
+                border[borderIndex] = TOP_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
+              }
+            } else if (leftBorderChar && rightBorderChar) {
+              if (aboveVerticalBorderChar) {
+                border[borderIndex] = JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
+              } else {
+                border[borderIndex] = TOP_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
+              }
+            } else if (!leftBorderChar && !rightBorderChar) {
+              console.log(verticalBorderStyle)
+              border[borderIndex] = verticalBorderChar
             }
-          } else if (leftBorderChar && !rightBorderChar) {
-            if (aboveVerticalBorderChar) {
-              border[borderIndex] = RIGHT_JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar]
-            } else {
-              border[borderIndex] = TOP_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
-            }
-          } else if (leftBorderChar && rightBorderChar) {
-            if (aboveVerticalBorderChar) {
-              border[borderIndex] = JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
-            } else {
-              border[borderIndex] = TOP_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
-            }
-          } else if (!leftBorderChar && !rightBorderChar) {
-            border[borderIndex] = verticalBorderChar
+
+            borderIndex++
           }
-
-          borderIndex++
         }
       }
 
