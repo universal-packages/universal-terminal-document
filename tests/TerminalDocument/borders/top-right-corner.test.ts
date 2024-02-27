@@ -169,7 +169,7 @@ Hello World        ┋`
     border: [true, true, false, false],
     borderStyle: ['thick', 'single', undefined, undefined],
     result: `
-━━━━━━━━━━━━━━━━━━━┐
+━━━━━━━━━━━━━━━━━━━┑
 Hello World        │`
   },
   {
@@ -201,7 +201,7 @@ Hello World        ║`
     border: [true, true, false, false],
     borderStyle: ['thick', 'dash-2', undefined, undefined],
     result: `
-━━━━━━━━━━━━━━━━━━━┐
+━━━━━━━━━━━━━━━━━━━┑
 Hello World        ╎`
   },
   {
@@ -217,7 +217,7 @@ Hello World        ╏`
     border: [true, true, false, false],
     borderStyle: ['thick', 'dash-3', undefined, undefined],
     result: `
-━━━━━━━━━━━━━━━━━━━┐
+━━━━━━━━━━━━━━━━━━━┑
 Hello World        ┆`
   },
   {
@@ -233,7 +233,7 @@ Hello World        ┇`
     border: [true, true, false, false],
     borderStyle: ['thick', 'dash-4', undefined, undefined],
     result: `
-━━━━━━━━━━━━━━━━━━━┐
+━━━━━━━━━━━━━━━━━━━┑
 Hello World        ┊`
   },
   {
@@ -409,7 +409,7 @@ Hello World        ┋`
     border: [true, true, false, false],
     borderStyle: ['dash-2-thick', 'single', undefined, undefined],
     result: `
-╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┐
+╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┑
 Hello World        │`
   },
   {
@@ -441,7 +441,7 @@ Hello World        ║`
     border: [true, true, false, false],
     borderStyle: ['dash-2-thick', 'dash-2', undefined, undefined],
     result: `
-╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┐
+╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┑
 Hello World        ╎`
   },
   {
@@ -457,7 +457,7 @@ Hello World        ╏`
     border: [true, true, false, false],
     borderStyle: ['dash-2-thick', 'dash-3', undefined, undefined],
     result: `
-╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┐
+╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┑
 Hello World        ┆`
   },
   {
@@ -473,7 +473,7 @@ Hello World        ┇`
     border: [true, true, false, false],
     borderStyle: ['dash-2-thick', 'dash-4', undefined, undefined],
     result: `
-╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┐
+╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┑
 Hello World        ┊`
   },
   {
@@ -569,7 +569,7 @@ Hello World        ┋`
     border: [true, true, false, false],
     borderStyle: ['dash-3-thick', 'single', undefined, undefined],
     result: `
-┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┐
+┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┑
 Hello World        │`
   },
   {
@@ -601,7 +601,7 @@ Hello World        ║`
     border: [true, true, false, false],
     borderStyle: ['dash-3-thick', 'dash-2', undefined, undefined],
     result: `
-┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┐
+┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┑
 Hello World        ╎`
   },
   {
@@ -617,7 +617,7 @@ Hello World        ╏`
     border: [true, true, false, false],
     borderStyle: ['dash-3-thick', 'dash-3', undefined, undefined],
     result: `
-┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┐
+┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┑
 Hello World        ┆`
   },
   {
@@ -633,7 +633,7 @@ Hello World        ┇`
     border: [true, true, false, false],
     borderStyle: ['dash-3-thick', 'dash-4', undefined, undefined],
     result: `
-┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┐
+┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┑
 Hello World        ┊`
   },
   {
@@ -729,7 +729,7 @@ Hello World        ┋`
     border: [true, true, false, false],
     borderStyle: ['dash-4-thick', 'single', undefined, undefined],
     result: `
-┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┐
+┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┑
 Hello World        │`
   },
   {
@@ -761,7 +761,7 @@ Hello World        ║`
     border: [true, true, false, false],
     borderStyle: ['dash-4-thick', 'dash-2', undefined, undefined],
     result: `
-┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┐
+┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┑
 Hello World        ╎`
   },
   {
@@ -777,7 +777,7 @@ Hello World        ╏`
     border: [true, true, false, false],
     borderStyle: ['dash-4-thick', 'dash-3', undefined, undefined],
     result: `
-┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┐
+┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┑
 Hello World        ┆`
   },
   {
@@ -793,7 +793,7 @@ Hello World        ┇`
     border: [true, true, false, false],
     borderStyle: ['dash-4-thick', 'dash-4', undefined, undefined],
     result: `
-┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┐
+┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┑
 Hello World        ┊`
   },
   {

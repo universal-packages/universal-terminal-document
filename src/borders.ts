@@ -191,7 +191,7 @@ export const TOP_LEFT_CORNER: Record<string, string> = {
   '┃2': '┎',
   '║2': '╔',
 
-  '│━': '┌',
+  '│━': '┍',
   '1━': '╭',
   '┃━': '┏',
   '║━': '╔',
@@ -213,7 +213,7 @@ export const TOP_RIGHT_CORNER: Record<string, string> = {
   '2┃': '┒',
   '2║': '╗',
 
-  '━│': '┐',
+  '━│': '┑',
   '━1': '╮',
   '━┃': '┓',
   '━║': '╗',
@@ -297,15 +297,15 @@ export const BOTTOM_JOIN: Record<string, string> = {
 export const BOTTOM_LEFT_CORNER: Record<string, string> = {
   '│─': '└',
   '1─': '╰',
-  '┃─': '┕',
-  '║─': '╘',
+  '┃─': '┖',
+  '║─': '╚',
 
   '│2': '╰',
   '12': '╰',
-  '┃2': '╰',
-  '║2': '╘',
+  '┃2': '┖',
+  '║2': '╚',
 
-  '│━': '┕',
+  '│━': '└',
   '1━': '┕',
   '┃━': '┗',
   '║━': '┗',
