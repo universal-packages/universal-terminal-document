@@ -12,7 +12,7 @@ describe(TerminalDocument, (): void => {
     expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
 ┏━━━━━━━━━┳━━━━━━━━┓
 ┃Hello    ┃World   ┃
-┣━━━━━━━━━┿━━━━━━━━┫
+┣━━━━━━━━━╋━━━━━━━━┫
 ┃Hello    ┃World   ┃
 ┗━━━━━━━━━┻━━━━━━━━┛
 `)
