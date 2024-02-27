@@ -206,7 +206,15 @@ export default class TerminalDocument extends EventEmitter {
         const leftBorder = leftBlock.block.border
         const rightBorder = rightBlock?.block.border
 
-        if (leftBorder?.[1] || rightBorder?.[3]) borderIndex++
+        if (i === 0) {
+          if (leftBorder[3]) {
+            borderIndex++
+          } else if (i === wrappedBlocks.length - 1) {
+            if (rightBorder?.[1]) borderIndex++
+          }
+        } else {
+          if (leftBorder[1] || rightBorder?.[3]) borderIndex++
+        }
 
         if (leftBorder?.[0]) {
           const topBorderStyle = leftBlock.block.borderStyle as SelectiveBorderStyle
@@ -282,7 +290,6 @@ export default class TerminalDocument extends EventEmitter {
                 border[borderIndex] = TOP_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
               }
             } else if (!leftBorderChar && !rightBorderChar) {
-              console.log(verticalBorderStyle)
               border[borderIndex] = verticalBorderChar
             }
 
@@ -393,9 +400,12 @@ export default class TerminalDocument extends EventEmitter {
 
       if (i === 0) {
         if (currentBlock.border[3]) count++
+      }
+
+      if (i === rowBlocks.length - 1) {
+        if (currentBlock.border[1]) count++
       } else {
-        if (previousBlock.border[1] || currentBlock.border[3]) count++
-        if (i === rowBlocks.length - 1 && currentBlock.border[1]) count++
+        if (previousBlock?.border[1] || currentBlock.border[3]) count++
       }
     }
 
