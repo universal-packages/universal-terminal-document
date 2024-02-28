@@ -1,11 +1,10 @@
 import { BlockDescriptor, TerminalDocumentOptions } from '../../src'
 
 type BlockDescriptorWithOutText = Omit<BlockDescriptor, 'text'>
-type SelectiveBlockDescriptor = BlockDescriptorWithOutText[]
 
 export function quadDocument(blockDescriptor?: BlockDescriptorWithOutText, width?: number): TerminalDocumentOptions
-export function quadDocument(blockDescriptors: SelectiveBlockDescriptor, width?: number): TerminalDocumentOptions
-export function quadDocument(blockDescriptors?: BlockDescriptorWithOutText | SelectiveBlockDescriptor, width = 20): TerminalDocumentOptions {
+export function quadDocument(blockDescriptors: BlockDescriptorWithOutText[], width?: number): TerminalDocumentOptions
+export function quadDocument(blockDescriptors?: BlockDescriptorWithOutText | BlockDescriptorWithOutText[], width = 20): TerminalDocumentOptions {
   if (!blockDescriptors) {
     return {
       rows: [{ blocks: [{ text: 'Hello' }, { text: 'World' }] }, { blocks: [{ text: 'Hello' }, { text: 'World' }] }],
