@@ -249,7 +249,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['double', undefined, undefined, 'single'],
     result: `
-┌═══════════════════
+╒═══════════════════
 │Hello World        `
   },
   {
@@ -281,7 +281,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['double', undefined, undefined, 'dash-2'],
     result: `
-┌═══════════════════
+╒═══════════════════
 ╎Hello World        `
   },
   {
@@ -297,7 +297,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['double', undefined, undefined, 'dash-3'],
     result: `
-┌═══════════════════
+╒═══════════════════
 ┆Hello World        `
   },
   {
@@ -313,7 +313,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['double', undefined, undefined, 'dash-4'],
     result: `
-┌═══════════════════
+╒═══════════════════
 ┊Hello World        `
   },
   {
@@ -959,8 +959,8 @@ Hello World         `
 ]
 
 const indexTest = undefined
-const initialCombinationIndex = indexTest ? indexTest : 0
-const finalCombinationIndex = indexTest ? indexTest + 1 : COMBINATIONS.length
+const initialCombinationIndex = indexTest !== undefined ? indexTest : 0
+const finalCombinationIndex = indexTest !== undefined ? indexTest + 1 : COMBINATIONS.length
 
 describe(TerminalDocument, (): void => {
   for (let i = initialCombinationIndex; i < finalCombinationIndex; i++) {

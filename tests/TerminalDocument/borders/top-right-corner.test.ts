@@ -249,7 +249,7 @@ Hello World        ┋`
     border: [true, true, false, false],
     borderStyle: ['double', 'single', undefined, undefined],
     result: `
-═══════════════════┐
+═══════════════════╕
 Hello World        │`
   },
   {
@@ -281,7 +281,7 @@ Hello World        ║`
     border: [true, true, false, false],
     borderStyle: ['double', 'dash-2', undefined, undefined],
     result: `
-═══════════════════┐
+═══════════════════╕
 Hello World        ╎`
   },
   {
@@ -297,7 +297,7 @@ Hello World        ╏`
     border: [true, true, false, false],
     borderStyle: ['double', 'dash-3', undefined, undefined],
     result: `
-═══════════════════┐
+═══════════════════╕
 Hello World        ┆`
   },
   {
@@ -313,7 +313,7 @@ Hello World        ┇`
     border: [true, true, false, false],
     borderStyle: ['double', 'dash-4', undefined, undefined],
     result: `
-═══════════════════┐
+═══════════════════╕
 Hello World        ┊`
   },
   {

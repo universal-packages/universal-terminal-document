@@ -14,8 +14,7 @@ describe(TerminalDocument, (): void => {
 │Hello    │World   │
 ├─────────┼────────┤
 │Hello    │World   │
-└─────────┴────────┘
-`)
+└─────────┴────────┘`)
 
     terminalDocument = new TerminalDocument(quadDocument({ border: true, borderStyle: 'single' }))
 
@@ -26,7 +25,6 @@ describe(TerminalDocument, (): void => {
 │Hello    │World   │
 ├─────────┼────────┤
 │Hello    │World   │
-└─────────┴────────┘
-`)
+└─────────┴────────┘`)
   })
 })

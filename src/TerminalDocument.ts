@@ -72,8 +72,9 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = 0; i < wrappedBlocks.length; i++) {
         const currentWrappedBlocks = wrappedBlocks[i]
         const previousWrappedBlocks = wrappedBlocks[i - 1]
+        const topBorderLine = this.generateBorderLine(currentWrappedBlocks, previousWrappedBlocks)
 
-        this.internalOutput += this.generateBorderLine(currentWrappedBlocks, previousWrappedBlocks)
+        this.internalOutput += topBorderLine ? topBorderLine + '\n' : ''
         this.internalOutput += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n') + (i < wrappedBlocks.length - 1 ? '\n' : '')
       }
 
@@ -187,7 +188,15 @@ export default class TerminalDocument extends EventEmitter {
         const leftBorder = leftBlock.block.border
         const rightBorder = rightBlock?.block.border
 
-        if (leftBorder?.[1] || rightBorder?.[3]) borderIndex++
+        if (i === 0) {
+          if (leftBorder[3]) {
+            borderIndex++
+          } else if (i === previousWrappedBlocks.length - 1) {
+            if (rightBorder?.[1]) borderIndex++
+          }
+        } else {
+          if (leftBorder[1] || rightBorder?.[3]) borderIndex++
+        }
 
         if (leftBorder?.[2]) {
           const bottomBorderStyle = leftBlock.block.borderStyle as SelectiveBorderStyle
@@ -230,26 +239,30 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = -1; i < previousWrappedBlocks?.length || 0; i++) {
         const leftBlock = previousWrappedBlocks?.[i]
         const rightBlock = previousWrappedBlocks?.[i + 1]
-        const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
-        const verticalBorderChar = VERTICAL_BORDERS[verticalBorderStyle]
+        const hasVerticalBorder = rightBlock?.block.border[3] || leftBlock?.block.border[1]
 
-        borderIndex += leftBlock?.width || 0
+        if (hasVerticalBorder) {
+          const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
+          const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
-        if (verticalBorderChar) {
-          const leftBorderChar = border[borderIndex - 1]?.replace(' ', '')
-          const rightBorderChar = border[borderIndex + 1]?.replace(' ', '')
+          borderIndex += leftBlock?.width || 0
 
-          if (!leftBorderChar && rightBorderChar) {
-            border[borderIndex] = BOTTOM_LEFT_CORNER[verticalBorderChar + rightBorderChar]
-          } else if (leftBorderChar && !rightBorderChar) {
-            border[borderIndex] = BOTTOM_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
-          } else if (leftBorderChar && rightBorderChar) {
-            border[borderIndex] = BOTTOM_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
-          } else if (!leftBorderChar && rightBorderChar) {
-            border[borderIndex] = verticalBorderChar
+          if (verticalBorderChar) {
+            const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]?.replace(' ', '')]
+            const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]?.replace(' ', '')]
+
+            if (!leftBorderChar && rightBorderChar) {
+              border[borderIndex] = BOTTOM_LEFT_CORNER[verticalBorderChar + rightBorderChar]
+            } else if (leftBorderChar && !rightBorderChar) {
+              border[borderIndex] = BOTTOM_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
+            } else if (leftBorderChar && rightBorderChar) {
+              border[borderIndex] = BOTTOM_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
+            } else if (!leftBorderChar && rightBorderChar) {
+              border[borderIndex] = verticalBorderChar
+            }
+
+            borderIndex++
           }
-
-          borderIndex++
         }
       }
 
@@ -307,7 +320,7 @@ export default class TerminalDocument extends EventEmitter {
         renderedBorder = renderedBorder.replace(new RegExp(roundBorderKey, 'g'), ROUND_BORDERS_MAP[roundBorderKey])
       }
 
-      return renderedBorder + '\n'
+      return renderedBorder
     }
 
     return ''

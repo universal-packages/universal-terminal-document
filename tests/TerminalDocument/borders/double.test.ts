@@ -14,7 +14,6 @@ describe(TerminalDocument, (): void => {
 ║Hello    ║World   ║
 ╠═════════╬════════╣
 ║Hello    ║World   ║
-╚═════════╩════════╝
-`)
+╚═════════╩════════╝`)
   })
 })
