@@ -33,7 +33,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['single', undefined, undefined, 'double'],
     result: `
-╔───────────────────
+╓───────────────────
 ║Hello World        `
   },
   {
@@ -113,7 +113,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['single-round', undefined, undefined, 'double'],
     result: `
-╔───────────────────
+╓───────────────────
 ║Hello World        `
   },
   {
@@ -353,7 +353,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['dash-2', undefined, undefined, 'double'],
     result: `
-╔╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+╓╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 ║Hello World        `
   },
   {
@@ -513,7 +513,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['dash-3', undefined, undefined, 'double'],
     result: `
-╔┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+╓┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 ║Hello World        `
   },
   {
@@ -673,7 +673,7 @@ const COMBINATIONS: { index: number; border: SelectiveBorder; borderStyle: Selec
     border: [true, false, false, true],
     borderStyle: ['dash-4', undefined, undefined, 'double'],
     result: `
-╔┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+╓┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ║Hello World        `
   },
   {
