@@ -243,10 +243,10 @@ export default class TerminalDocument extends EventEmitter {
       for (let i = -1; i < previousWrappedBlocks?.length || 0; i++) {
         const leftBlock = previousWrappedBlocks?.[i]
         const rightBlock = previousWrappedBlocks?.[i + 1]
-        const hasVerticalBorder = rightBlock?.block.border[3] || leftBlock?.block.border[1]
+        const hasVerticalBorder = leftBlock?.block.border[1] || rightBlock?.block.border[3]
 
         if (hasVerticalBorder) {
-          const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
+          const verticalBorderStyle = leftBlock?.block.borderStyle?.[1] || rightBlock?.block.borderStyle?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
           borderIndex += leftBlock?.width || 0

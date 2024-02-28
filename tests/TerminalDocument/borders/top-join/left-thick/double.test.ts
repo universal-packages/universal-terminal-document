@@ -14,7 +14,7 @@ const COMBINATIONS: {
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'single'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -22,7 +22,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'single-round'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -30,7 +30,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -38,7 +38,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'double'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -46,7 +46,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'dash-2'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -54,7 +54,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'dash-2-thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -62,7 +62,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'dash-3'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -70,7 +70,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'dash-3-thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -78,7 +78,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'dash-4'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -86,7 +86,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single', undefined, undefined, 'dash-4-thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -94,7 +94,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'single'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -102,7 +102,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'single-round'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -110,7 +110,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -118,7 +118,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'double'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -126,7 +126,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'dash-2'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -134,7 +134,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'dash-2-thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -142,7 +142,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'dash-3'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -150,7 +150,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'dash-3-thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -158,7 +158,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'dash-4'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -166,7 +166,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['single-round', undefined, undefined, 'dash-4-thick'],
     result: `
-━━━━━━━━━━╥─────────
+━━━━━━━━━━╦─────────
 Hello     ║World    `
   },
   {
@@ -334,7 +334,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'single'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -342,7 +342,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'single-round'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -350,7 +350,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'thick'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -358,7 +358,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'double'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -366,7 +366,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'dash-2'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -374,7 +374,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'dash-2-thick'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -382,7 +382,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'dash-3'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -390,7 +390,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'dash-3-thick'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -398,7 +398,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'dash-4'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -406,7 +406,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-2', undefined, undefined, 'dash-4-thick'],
     result: `
-━━━━━━━━━━╥╌╌╌╌╌╌╌╌╌
+━━━━━━━━━━╦╌╌╌╌╌╌╌╌╌
 Hello     ║World    `
   },
   {
@@ -494,7 +494,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'single'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -502,7 +502,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'single-round'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -510,7 +510,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'thick'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -518,7 +518,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'double'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -526,7 +526,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'dash-2'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -534,7 +534,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'dash-2-thick'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -542,7 +542,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'dash-3'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -550,7 +550,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'dash-3-thick'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -558,7 +558,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'dash-4'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -566,7 +566,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-3', undefined, undefined, 'dash-4-thick'],
     result: `
-━━━━━━━━━━╥┄┄┄┄┄┄┄┄┄
+━━━━━━━━━━╦┄┄┄┄┄┄┄┄┄
 Hello     ║World    `
   },
   {
@@ -654,7 +654,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'single'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -662,7 +662,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'single-round'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -670,7 +670,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'thick'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -678,7 +678,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'double'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -686,7 +686,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'dash-2'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -694,7 +694,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'dash-2-thick'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -702,7 +702,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'dash-3'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -710,7 +710,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'dash-3-thick'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -718,7 +718,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'dash-4'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
@@ -726,7 +726,7 @@ Hello     ║World    `
     leftBorderStyle: ['thick', 'double', undefined, undefined],
     rightBorderStyle: ['dash-4', undefined, undefined, 'dash-4-thick'],
     result: `
-━━━━━━━━━━╥┈┈┈┈┈┈┈┈┈
+━━━━━━━━━━╦┈┈┈┈┈┈┈┈┈
 Hello     ║World    `
   },
   {
