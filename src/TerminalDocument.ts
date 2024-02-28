@@ -154,18 +154,22 @@ export default class TerminalDocument extends EventEmitter {
 
     for (let i = 0; i < wrappedBlocks.length; i++) {
       const currentWrappedBlock = wrappedBlocks[i]
-      const previousWrappedBlock = wrappedBlocks[i - 1]
+      const nextWrappedBlock = wrappedBlocks[i + 1]
 
       for (let j = 0; j < currentWrappedBlock.lines.length; j++) {
         const currentWrappedLine = currentWrappedBlock.lines[j]
 
-        if ((i === 0 && currentWrappedBlock.block.border[3]) || previousWrappedBlock?.block.border[1] || currentWrappedBlock.block.border[3]) {
+        if (i === 0 && currentWrappedBlock.block.border[3]) {
           lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[3]]]
         }
 
         lines[j] += this.synthesizeWrappedLine(currentWrappedLine, currentWrappedBlock.block)
 
-        if (i === wrappedBlocks.length - 1 && currentWrappedBlock.block.border[1]) {
+        if (i === wrappedBlocks.length - 1) {
+          if (currentWrappedBlock.block.border[1]) {
+            lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]]
+          }
+        } else if (currentWrappedBlock.block.border[1] || nextWrappedBlock?.block.border[3]) {
           lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]]
         }
       }
@@ -182,57 +186,57 @@ export default class TerminalDocument extends EventEmitter {
       const border = Array(this.documentWidth).fill(' ')
       let borderIndex = 0
 
-      for (let i = 0; i < previousWrappedBlocks?.length || 0; i++) {
+      for (let i = -1; i < previousWrappedBlocks?.length || 0; i++) {
         const leftBlock = previousWrappedBlocks[i]
         const rightBlock = previousWrappedBlocks[i + 1]
-        const leftBorder = leftBlock.block.border
+        const leftBorder = leftBlock?.block.border
         const rightBorder = rightBlock?.block.border
 
-        if (i === 0) {
-          if (leftBorder[3]) {
-            borderIndex++
-          } else if (i === previousWrappedBlocks.length - 1) {
-            if (rightBorder?.[1]) borderIndex++
-          }
-        } else {
-          if (leftBorder[1] || rightBorder?.[3]) borderIndex++
+        if (!leftBorder && rightBorder) {
+          if (rightBorder?.[3]) borderIndex++
+        } else if (leftBorder && !rightBorder) {
+          if (leftBorder[1]) borderIndex++
+        } else if (leftBorder && rightBorder) {
+          if (leftBorder[1] || rightBorder[3]) borderIndex++
         }
 
-        if (leftBorder?.[2]) {
-          const bottomBorderStyle = leftBlock.block.borderStyle as SelectiveBorderStyle
+        if (rightBorder?.[2]) {
+          const rightBorderStyle = rightBlock.block.borderStyle as SelectiveBorderStyle
 
-          border.splice(borderIndex, leftBlock.width, ...Array(leftBlock.width).fill(HORIZONTAL_BORDERS[bottomBorderStyle[2]]))
+          border.splice(borderIndex, rightBlock.width, ...Array(rightBlock.width).fill(HORIZONTAL_BORDERS[rightBorderStyle[2]]))
         }
 
-        borderIndex += leftBlock.width
+        borderIndex += rightBlock?.width || 0
       }
+
+      // console.log(border.join('').replace(/ /g, '.'))
 
       borderIndex = 0
 
-      for (let i = 0; i < wrappedBlocks?.length || 0; i++) {
+      for (let i = -1; i < wrappedBlocks?.length || 0; i++) {
         const leftBlock = wrappedBlocks[i]
         const rightBlock = wrappedBlocks[i + 1]
-        const leftBorder = leftBlock.block.border
+        const leftBorder = leftBlock?.block.border
         const rightBorder = rightBlock?.block.border
 
-        if (i === 0) {
-          if (leftBorder[3]) {
-            borderIndex++
-          } else if (i === wrappedBlocks.length - 1) {
-            if (rightBorder?.[1]) borderIndex++
-          }
-        } else {
-          if (leftBorder[1] || rightBorder?.[3]) borderIndex++
+        if (!leftBorder && rightBorder) {
+          if (rightBorder?.[3]) borderIndex++
+        } else if (leftBorder && !rightBorder) {
+          if (leftBorder[1]) borderIndex++
+        } else if (leftBorder && rightBorder) {
+          if (leftBorder[1] || rightBorder[3]) borderIndex++
         }
 
-        if (leftBorder?.[0]) {
-          const topBorderStyle = leftBlock.block.borderStyle as SelectiveBorderStyle
+        if (rightBorder?.[0]) {
+          const rightBorderStyle = rightBlock.block.borderStyle as SelectiveBorderStyle
 
-          border.splice(borderIndex, leftBlock.width, ...Array(leftBlock.width).fill(HORIZONTAL_BORDERS[topBorderStyle[0]]))
+          border.splice(borderIndex, rightBlock.width, ...Array(rightBlock.width).fill(HORIZONTAL_BORDERS[rightBorderStyle[0]]))
         }
 
-        borderIndex += leftBlock.width
+        borderIndex += rightBlock?.width || 0
       }
+
+      // console.log(border.join('').replace(/ /g, '.'))
 
       borderIndex = 0
 
@@ -266,6 +270,8 @@ export default class TerminalDocument extends EventEmitter {
         }
       }
 
+      // console.log(border.join('').replace(/ /g, '.'))
+
       borderIndex = 0
 
       for (let i = -1; i < wrappedBlocks?.length || 0; i++) {
@@ -274,7 +280,7 @@ export default class TerminalDocument extends EventEmitter {
         const hasVerticalBorder = rightBlock?.block.border[3] || leftBlock?.block.border[1]
 
         if (hasVerticalBorder) {
-          const verticalBorderStyle = rightBlock?.block.borderStyle?.[3] || leftBlock?.block.borderStyle?.[1]
+          const verticalBorderStyle = leftBlock?.block.borderStyle?.[1] || rightBlock?.block.borderStyle?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
           borderIndex += leftBlock?.width || 0
@@ -407,21 +413,20 @@ export default class TerminalDocument extends EventEmitter {
   private getHorizontalBorderCountNeeded(rowBlocks: BlockDescriptor[]): number {
     let count = 0
 
-    for (let i = 0; i < rowBlocks.length; i++) {
-      const currentBlock = rowBlocks[i]
-      const previousBlock = rowBlocks[i - 1]
+    for (let i = -1; i < rowBlocks?.length || 0; i++) {
+      const leftBlock = rowBlocks[i]
+      const rightBlock = rowBlocks[i + 1]
+      const leftBorder = leftBlock?.border
+      const rightBorder = rightBlock?.border
 
-      if (i === 0) {
-        if (currentBlock.border[3]) count++
-      }
-
-      if (i === rowBlocks.length - 1) {
-        if (currentBlock.border[1]) count++
-      } else {
-        if (previousBlock?.border[1] || currentBlock.border[3]) count++
+      if (!leftBorder && rightBorder) {
+        if (rightBorder?.[3]) count++
+      } else if (leftBorder && !rightBorder) {
+        if (leftBorder[1]) count++
+      } else if (leftBorder && rightBorder) {
+        if (leftBorder[1] || rightBorder[3]) count++
       }
     }
-
     return count
   }
 
