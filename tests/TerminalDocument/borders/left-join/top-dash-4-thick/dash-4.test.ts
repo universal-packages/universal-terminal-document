@@ -42,7 +42,7 @@ const COMBINATIONS: {
     bottomBorderStyle: ['single', undefined, undefined, 'double'],
     result: `
 ┊Hello              
-╠───────────────────
+╟───────────────────
 ║World              `
   },
   {
@@ -132,7 +132,7 @@ const COMBINATIONS: {
     bottomBorderStyle: ['single-round', undefined, undefined, 'double'],
     result: `
 ┊Hello              
-╠───────────────────
+╟───────────────────
 ║World              `
   },
   {
@@ -402,7 +402,7 @@ const COMBINATIONS: {
     bottomBorderStyle: ['dash-2', undefined, undefined, 'double'],
     result: `
 ┊Hello              
-╠╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+╟╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 ║World              `
   },
   {
@@ -582,7 +582,7 @@ const COMBINATIONS: {
     bottomBorderStyle: ['dash-3', undefined, undefined, 'double'],
     result: `
 ┊Hello              
-╠┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+╟┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
 ║World              `
   },
   {
@@ -762,7 +762,7 @@ const COMBINATIONS: {
     bottomBorderStyle: ['dash-4', undefined, undefined, 'double'],
     result: `
 ┊Hello              
-╠┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+╟┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ║World              `
   },
   {
