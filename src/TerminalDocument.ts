@@ -10,6 +10,8 @@ import {
   BOTTOM_RIGHT_CORNER,
   HORIZONTAL_BORDERS,
   HORIZONTAL_BORDERS_ANALOGOUS_MAP,
+  HORIZONTAL_LEFT_INFER_MAP,
+  HORIZONTAL_RIGHT_INFER_MAP,
   JOIN,
   LEFT_JOIN,
   RIGHT_JOIN,
@@ -20,7 +22,10 @@ import {
   VERTICAL_BORDERS,
   VERTICAL_BORDERS_ANALOGOUS_MAP,
   VERTICAL_BORDERS_RECTIFICATION_MAP,
-  VERTICAL_INFER_MAP
+  VERTICAL_BOTTOM_END,
+  VERTICAL_INFER_MAP,
+  VERTICAL_JOIN,
+  VERTICAL_TOP_END
 } from './borders'
 import { COLORS } from './colors'
 import {
@@ -245,11 +250,11 @@ export default class TerminalDocument extends EventEmitter {
         const rightBlock = previousWrappedBlocks?.[i + 1]
         const hasVerticalBorder = leftBlock?.block.border[1] || rightBlock?.block.border[3]
 
+        borderIndex += leftBlock?.width || 0
+
         if (hasVerticalBorder) {
           const verticalBorderStyle = leftBlock?.block.borderStyle?.[1] || rightBlock?.block.borderStyle?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
-
-          borderIndex += leftBlock?.width || 0
 
           if (verticalBorderChar) {
             const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]?.replace(' ', '')]
@@ -261,8 +266,8 @@ export default class TerminalDocument extends EventEmitter {
               border[borderIndex] = BOTTOM_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
             } else if (leftBorderChar && rightBorderChar) {
               border[borderIndex] = BOTTOM_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
-            } else if (!leftBorderChar && rightBorderChar) {
-              border[borderIndex] = verticalBorderChar
+            } else if (!leftBorderChar && !rightBorderChar) {
+              border[borderIndex] = VERTICAL_BOTTOM_END[verticalBorderChar]
             }
 
             borderIndex++
@@ -279,15 +284,15 @@ export default class TerminalDocument extends EventEmitter {
         const rightBlock = wrappedBlocks?.[i + 1]
         const hasVerticalBorder = rightBlock?.block.border[3] || leftBlock?.block.border[1]
 
+        borderIndex += leftBlock?.width || 0
+
         if (hasVerticalBorder) {
           const verticalBorderStyle = leftBlock?.block.borderStyle?.[1] || rightBlock?.block.borderStyle?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
-          borderIndex += leftBlock?.width || 0
-
           if (verticalBorderChar) {
-            const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]]
-            const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]]
+            const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]] || HORIZONTAL_LEFT_INFER_MAP[border[borderIndex - 1]]
+            const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]] || HORIZONTAL_RIGHT_INFER_MAP[border[borderIndex + 1]]
             const aboveVerticalBorderChar = VERTICAL_INFER_MAP[border[borderIndex]]
 
             if (!leftBorderChar && rightBorderChar) {
@@ -309,13 +314,19 @@ export default class TerminalDocument extends EventEmitter {
                 border[borderIndex] = TOP_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
               }
             } else if (!leftBorderChar && !rightBorderChar) {
-              border[borderIndex] = verticalBorderChar
+              if (aboveVerticalBorderChar) {
+                border[borderIndex] = VERTICAL_JOIN[aboveVerticalBorderChar + verticalBorderChar]
+              } else {
+                border[borderIndex] = VERTICAL_TOP_END[verticalBorderChar]
+              }
             }
 
             borderIndex++
           }
         }
       }
+
+      // console.log(border.join('').replace(/ /g, '.'))
 
       let renderedBorder = border.join('')
       const roundBorderKeys = Object.keys(ROUND_BORDERS_MAP)
@@ -325,6 +336,8 @@ export default class TerminalDocument extends EventEmitter {
 
         renderedBorder = renderedBorder.replace(new RegExp(roundBorderKey, 'g'), ROUND_BORDERS_MAP[roundBorderKey])
       }
+
+      // console.log('Next')
 
       return renderedBorder
     }

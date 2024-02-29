@@ -32,11 +32,11 @@ const COMBINATIONS: {
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔═════════╦════════╗
-║Hello    ║World   ║
-╠═════════╬════════╣
-║Hello    ║World   ║
-╚═════════╩════════╝`
+┏┅┅┅┅┅┅┅┅┅┳┅┅┅┅┅┅┅┅┓
+┇Hello    ┇World   ┇
+┣┅┅┅┅┅┅┅┅┅╋┅┅┅┅┅┅┅┅┫
+┇Hello    ┇World   ┇
+┗┅┅┅┅┅┅┅┅┅┻┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: false,
@@ -52,11 +52,11 @@ const COMBINATIONS: {
     bottomBottomLeftBorder: false,
     bottomBottomRightBorder: true,
     result: `
-╻         ╔═════════
-║Hello    ║World    
-╠═════════╬═════════
-║Hello    ║World    
-╹         ╚═════════`
+╻         ┏┅┅┅┅┅┅┅┅┅
+┇Hello    ┇World    
+┣┅┅┅┅┅┅┅┅┅╋┅┅┅┅┅┅┅┅┅
+┇Hello    ┇World    
+╹         ┗┅┅┅┅┅┅┅┅┅`
   },
   {
     topTopLeftBorder: true,
@@ -72,11 +72,11 @@ const COMBINATIONS: {
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: false,
     result: `
-═════════╗         ╻
-Hello    ║World    ║
-═════════╬═════════╣
-Hello    ║World    ║
-═════════╝         ╹`
+┅┅┅┅┅┅┅┅┅┓         ╻
+Hello    ┇World    ┇
+┅┅┅┅┅┅┅┅┅╋┅┅┅┅┅┅┅┅┅┫
+Hello    ┇World    ┇
+┅┅┅┅┅┅┅┅┅┛         ╹`
   },
   {
     topTopLeftBorder: true,
@@ -92,10 +92,10 @@ Hello    ║World    ║
     bottomBottomLeftBorder: false,
     bottomBottomRightBorder: false,
     result: `
-══════════╦═════════
-Hello     ║World    
-╔═════════╬════════╗
-║Hello    ║World   ║`
+┅┅┅┅┅┅┅┅┅┅┳┅┅┅┅┅┅┅┅┅
+Hello     ┇World    
+┏┅┅┅┅┅┅┅┅┅╋┅┅┅┅┅┅┅┅┓
+┇Hello    ┇World   ┇`
   },
   {
     topTopLeftBorder: false,
@@ -111,10 +111,10 @@ Hello     ║World
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-║Hello    ║World   ║
-╚═════════╬════════╝
-Hello     ║World    
-══════════╩═════════`
+┇Hello    ┇World   ┇
+┗┅┅┅┅┅┅┅┅┅╋┅┅┅┅┅┅┅┅┛
+Hello     ┇World    
+┅┅┅┅┅┅┅┅┅┅┻┅┅┅┅┅┅┅┅┅`
   },
   {
     topTopLeftBorder: false,
@@ -130,9 +130,9 @@ Hello     ║World
     bottomBottomLeftBorder: false,
     bottomBottomRightBorder: false,
     result: `
-Hello     ║World    
-══════════╬═════════
-Hello     ║World    `
+Hello     ┇World    
+┅┅┅┅┅┅┅┅┅┅╋┅┅┅┅┅┅┅┅┅
+Hello     ┇World    `
   },
   {
     topTopLeftBorder: true,
@@ -148,10 +148,10 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔══════════════════╗
-║Hello    World    ║
-║Hello    World    ║
-╚══════════════════╝`
+┏┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┓
+┇Hello    World    ┇
+┇Hello    World    ┇
+┗┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -167,10 +167,10 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔═════════╦════════╗
-║Hello    ║World   ║
-║Hello    ║World   ║
-╚═════════╩════════╝`
+┏┅┅┅┅┅┅┅┅┅┳┅┅┅┅┅┅┅┅┓
+┇Hello    ┇World   ┇
+┇Hello    ┇World   ┇
+┗┅┅┅┅┅┅┅┅┅┻┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -186,11 +186,11 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔══════════════════╗
-║Hello    World    ║
-╠══════════════════╣
-║Hello    World    ║
-╚══════════════════╝`
+┏┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┓
+┇Hello    World    ┇
+┣┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┫
+┇Hello    World    ┇
+┗┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -206,11 +206,11 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔═════════╦════════╗
-║Hello    ║World   ║
-╠═════════╩════════╣
-║Hello    World    ║
-╚══════════════════╝`
+┏┅┅┅┅┅┅┅┅┅┳┅┅┅┅┅┅┅┅┓
+┇Hello    ┇World   ┇
+┣┅┅┅┅┅┅┅┅┅┻┅┅┅┅┅┅┅┅┫
+┇Hello    World    ┇
+┗┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -226,11 +226,11 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔══════════════════╗
-║Hello    World    ║
-╠═════════╦════════╣
-║Hello    ║World   ║
-╚═════════╩════════╝`
+┏┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┓
+┇Hello    World    ┇
+┣┅┅┅┅┅┅┅┅┅┳┅┅┅┅┅┅┅┅┫
+┇Hello    ┇World   ┇
+┗┅┅┅┅┅┅┅┅┅┻┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -246,11 +246,11 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔═════════╦════════╗
-║Hello    ║World   ║
-╠═════════╣        ┃
-║Hello    ║World   ║
-╚═════════╩════════╝`
+┏┅┅┅┅┅┅┅┅┅┳┅┅┅┅┅┅┅┅┓
+┇Hello    ┇World   ┇
+┣┅┅┅┅┅┅┅┅┅┫        ┃
+┇Hello    ┇World   ┇
+┗┅┅┅┅┅┅┅┅┅┻┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -266,11 +266,11 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-╔═════════╦════════╗
-║Hello    ║World   ║
-┃         ╠════════╣
-║Hello    ║World   ║
-╚═════════╩════════╝`
+┏┅┅┅┅┅┅┅┅┅┳┅┅┅┅┅┅┅┅┓
+┇Hello    ┇World   ┇
+┃         ┣┅┅┅┅┅┅┅┅┫
+┇Hello    ┇World   ┇
+┗┅┅┅┅┅┅┅┅┅┻┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -286,11 +286,11 @@ Hello     ║World    `
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: false,
     result: `
-╔═════════╗         
-║Hello    ║World    
-╠═════════╣         
-║Hello    ║World    
-╚═════════╝         `
+┏┅┅┅┅┅┅┅┅┅┓         
+┇Hello    ┇World    
+┣┅┅┅┅┅┅┅┅┅┫         
+┇Hello    ┇World    
+┗┅┅┅┅┅┅┅┅┅┛         `
   },
   {
     topTopLeftBorder: false,
@@ -306,11 +306,11 @@ Hello     ║World    `
     bottomBottomLeftBorder: false,
     bottomBottomRightBorder: true,
     result: `
-         ╔═════════╗
-Hello    ║World    ║
-         ╠═════════╣
-Hello    ║World    ║
-         ╚═════════╝`
+         ┏┅┅┅┅┅┅┅┅┅┓
+Hello    ┇World    ┇
+         ┣┅┅┅┅┅┅┅┅┅┫
+Hello    ┇World    ┇
+         ┗┅┅┅┅┅┅┅┅┅┛`
   },
   {
     topTopLeftBorder: true,
@@ -326,11 +326,11 @@ Hello    ║World    ║
     bottomBottomLeftBorder: true,
     bottomBottomRightBorder: true,
     result: `
-════════════════════
+┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
 Hello     World     
-════════════════════
+┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
 Hello     World     
-════════════════════`
+┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅`
   },
   {
     topTopLeftBorder: false,
@@ -346,8 +346,8 @@ Hello     World
     bottomBottomLeftBorder: false,
     bottomBottomRightBorder: false,
     result: `
-║Hello    ║World   ║
-║Hello    ║World   ║`
+┇Hello    ┇World   ┇
+┇Hello    ┇World   ┇`
   }
 ]
 
@@ -364,19 +364,19 @@ describe(TerminalDocument, (): void => {
         quadDocument([
           {
             border: [currentCombination.topTopLeftBorder, currentCombination.topCenterBorder, currentCombination.middleLeftBorder, currentCombination.topLeftBorder],
-            borderStyle: 'double'
+            borderStyle: 'dash-3-thick'
           },
           {
             border: [currentCombination.topTopRightBorder, currentCombination.topRightBorder, currentCombination.middleRightBorder, currentCombination.topCenterBorder],
-            borderStyle: 'double'
+            borderStyle: 'dash-3-thick'
           },
           {
             border: [currentCombination.middleLeftBorder, currentCombination.bottomCenterBorder, currentCombination.bottomBottomLeftBorder, currentCombination.bottomLeftBorder],
-            borderStyle: 'double'
+            borderStyle: 'dash-3-thick'
           },
           {
             border: [currentCombination.middleRightBorder, currentCombination.bottomRightBorder, currentCombination.bottomBottomRightBorder, currentCombination.bottomCenterBorder],
-            borderStyle: 'double'
+            borderStyle: 'dash-3-thick'
           }
         ])
       )
