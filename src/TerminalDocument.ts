@@ -170,12 +170,10 @@ export default class TerminalDocument extends EventEmitter {
 
         lines[j] += this.synthesizeWrappedLine(currentWrappedLine, currentWrappedBlock.block)
 
-        if (i === wrappedBlocks.length - 1) {
-          if (currentWrappedBlock.block.border[1]) {
-            lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]]
-          }
-        } else if (currentWrappedBlock.block.border[1] || nextWrappedBlock?.block.border[3]) {
+        if (currentWrappedBlock.block.border[1]) {
           lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]]
+        } else if (nextWrappedBlock?.block.border[3]) {
+          lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[nextWrappedBlock.block.borderStyle[3]]]
         }
       }
     }
