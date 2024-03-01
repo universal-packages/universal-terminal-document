@@ -1,5 +1,3 @@
-import terminalSize from 'term-size'
-
 import { BlueColor, BrownColor, GrayColor, RedColor, TerminalDocument, WhiteColor } from '../../src'
 
 describe(TerminalDocument, () => {
@@ -119,8 +117,7 @@ describe(TerminalDocument, () => {
             }
           ]
         }
-      ],
-      width: terminalSize().columns - 5 // To respect console.log's jest margin
+      ]
     })
 
     document.update()
@@ -129,38 +126,40 @@ describe(TerminalDocument, () => {
     // console.log(document.output)
 
     expect(document.output.split('\n')).toEqual([
-      '                                                                                                                         ',
-      " \u001b[38;2;127;255;212mRun, run, run, as fast as you can.\u001b[39m                 \u001b[38;2;255;20;147mYou can't catch me\u001b[39m                         \u001b[38;2;255;215;0mI am the gingerbread man!\u001b[39m ",
-      '                                                                                                                         ',
-      '\u001b[48;2;139;0;0m                                                            \u001b[49m\u001b[48;2;139;0;0m                                                             \u001b[49m',
-      '\u001b[48;2;139;0;0m \u001b[49m\u001b[48;2;139;0;0m                                                  \u001b[49m\u001b[38;2;240;248;255m\u001b[1m\u001b[48;2;139;0;0mYou are a monster!\u001b[49m\u001b[22m\u001b[39m\u001b[48;2;139;0;0m                                                   \u001b[49m\u001b[48;2;139;0;0m \u001b[49m',
-      '\u001b[48;2;139;0;0m                                                            \u001b[49m\u001b[48;2;139;0;0m                                                             \u001b[49m',
-      '                                                                                ╔═══════════════════════════════════════╗',
-      '                                                                                ║                                       ║',
-      " \u001b[38;2;240;248;255m\u001b[1m\u001b[3m\u001b[48;2;30;144;255mI'm not the monster here, you are. You\u001b[49m\u001b[23m\u001b[22m\u001b[39m                                         ║                                       ║",
-      ' \u001b[38;2;240;248;255m\u001b[1m\u001b[3m\u001b[48;2;30;144;255mand the rest of that fairy tale trash,\u001b[49m\u001b[23m\u001b[22m\u001b[39m                                         ║                                       ║',
-      ' \u001b[38;2;240;248;255m\u001b[1m\u001b[3m\u001b[48;2;30;144;255mpoisoning     my     perfect     world\u001b[49m\u001b[23m\u001b[22m\u001b[39m                                         ║                                       ║',
-      '                                                                                ║  Now tell me, where are the others?!  ║',
-      '┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╩╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┫',
-      '╏                                                        \u001b[38;2;255;160;122m\u001b[4mEat me!\u001b[24m\u001b[39m                                                        ╏',
-      '┗╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┯╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┛',
-      "Ugh! I've tried to be fair to │                                                                                          ",
-      "        you creatures.        │ Now my patience has reached its end! Tell me or I'll...                                  ",
-      '                              │                                                                                          ',
-      '                                                                                                                         ',
-      '                                                                                                                         ',
-      '  \u001b[48;2;205;92;92m                                  \u001b[49m\u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;205;92;92mNo, no, not the buttons. Not my gumdrop buttons!\u001b[49m\u001b[27m\u001b[22m\u001b[39m\u001b[48;2;205;92;92m                                   \u001b[49m  ',
-      '                                                                                                                         ',
-      '                                                                                                                         ',
-      "                                                                                       \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mAll\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mright\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mthen,\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mwho's\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mhiding\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mthem?\u001b[49m\u001b[27m\u001b[22m\u001b[39m",
-      "          - I'll tell you. Do you know the muffin man?                                                                   ",
-      '          - The muffin man?                                                                                              ',
-      '          - The muffin man                                                                                               ',
-      '          - Yes, I know the muffin man. Who lives on Drury Lane?                                                         ',
-      "          - Well, she's married to the muffin man.                                                                       ",
-      '          - The muffin man?                                                                                              ',
-      '          - The muffin man!                                                                                              ',
-      "          - She's married to the muffin man.                                                                             "
+      '                                                                                 ',
+      " \u001b[38;2;127;255;212mRun, run, run, as fast as\u001b[39m      \u001b[38;2;255;20;147mYou can't catch me\u001b[39m          \u001b[38;2;255;215;0mI am the gingerbread\u001b[39m ",
+      ' \u001b[38;2;127;255;212myou can.\u001b[39m                                                                   \u001b[38;2;255;215;0mman!\u001b[39m ',
+      '                                                                                 ',
+      '\u001b[48;2;139;0;0m                                        \u001b[49m\u001b[48;2;139;0;0m                                        \u001b[49m',
+      '\u001b[48;2;139;0;0m \u001b[49m\u001b[48;2;139;0;0m                              \u001b[49m\u001b[38;2;240;248;255m\u001b[1m\u001b[48;2;139;0;0mYou are a monster!\u001b[49m\u001b[22m\u001b[39m\u001b[48;2;139;0;0m                              \u001b[49m\u001b[48;2;139;0;0m \u001b[49m',
+      '\u001b[48;2;139;0;0m                                        \u001b[49m\u001b[48;2;139;0;0m                                        \u001b[49m',
+      '                                                           ╔═══════════════════╗',
+      '                                                           ║                   ║',
+      " \u001b[38;2;240;248;255m\u001b[1m\u001b[3m\u001b[48;2;30;144;255mI'm not the monster here, you are. You\u001b[49m\u001b[23m\u001b[22m\u001b[39m                    ║                   ║",
+      ' \u001b[38;2;240;248;255m\u001b[1m\u001b[3m\u001b[48;2;30;144;255mand the rest of that fairy tale trash,\u001b[49m\u001b[23m\u001b[22m\u001b[39m                    ║                   ║',
+      ' \u001b[38;2;240;248;255m\u001b[1m\u001b[3m\u001b[48;2;30;144;255mpoisoning     my     perfect     world\u001b[49m\u001b[23m\u001b[22m\u001b[39m                    ║Now tell me, where ║',
+      '                                                           ║ are the others?!  ║',
+      '┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╩╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┫',
+      '╏                                   \u001b[38;2;255;160;122m\u001b[4mEat me!\u001b[24m\u001b[39m                                    ╏',
+      '┗╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┯╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┛',
+      "Ugh! I've tried to be fair to │                                                 ",
+      '        you creatures.        │ Now my patience has reached its end! Tell me or ',
+      "                              │ I'll...                                         ",
+      '                              │                                                 ',
+      '                                                                                ',
+      '                                                                                ',
+      '  \u001b[48;2;205;92;92m              \u001b[49m\u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;205;92;92mNo, no, not the buttons. Not my gumdrop buttons!\u001b[49m\u001b[27m\u001b[22m\u001b[39m\u001b[48;2;205;92;92m              \u001b[49m  ',
+      '                                                                                ',
+      '                                                                                ',
+      "                                              \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mAll\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mright\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mthen,\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mwho's\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mhiding\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mthem?\u001b[49m\u001b[27m\u001b[22m\u001b[39m",
+      "          - I'll tell you. Do you know the muffin man?                          ",
+      '          - The muffin man?                                                     ',
+      '          - The muffin man                                                      ',
+      '          - Yes, I know the muffin man. Who lives on Drury Lane?                ',
+      "          - Well, she's married to the muffin man.                              ",
+      '          - The muffin man?                                                     ',
+      '          - The muffin man!                                                     ',
+      "          - She's married to the muffin man.                                    "
     ])
   })
 })

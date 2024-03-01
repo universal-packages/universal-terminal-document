@@ -19,8 +19,7 @@
     "@universal-packages/event-emitter": "^1.1.2",
     "@universal-packages/text-wrap": "^1.4.0",
     "ansi-escapes": "^4.3.2",
-    "chalk": "^4.1.2",
-    "term-size": "^2.2.1"
+    "chalk": "^4.1.2"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",

@@ -2,7 +2,6 @@ import { EventEmitter } from '@universal-packages/event-emitter'
 import { VerticalAlign, WrapTextOptions, WrappedLine, synthesizeWrappedLine, wrap } from '@universal-packages/text-wrap'
 import ansiScapes from 'ansi-escapes'
 import chalk from 'chalk'
-import terminalSize from 'term-size'
 
 import {
   BOTTOM_JOIN,
@@ -57,9 +56,9 @@ export default class TerminalDocument extends EventEmitter {
   public constructor(options: TerminalDocumentOptions) {
     super()
 
-    this.options = { context: {}, ...options }
+    this.options = { context: {}, width: 80, ...options }
     this.context = this.options.context
-    this.documentWidth = this.options.width || terminalSize().columns
+    this.documentWidth = this.options.width
     this.generateTemplate()
   }
 
