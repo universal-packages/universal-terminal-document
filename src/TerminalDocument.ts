@@ -251,25 +251,23 @@ export default class TerminalDocument extends EventEmitter {
         borderIndex += leftBlock?.width || 0
 
         if (hasVerticalBorder) {
-          const verticalBorderStyle = leftBlock?.block.borderStyle?.[1] || rightBlock?.block.borderStyle?.[3]
+          const verticalBorderStyle = leftBlock?.block.border[1] ? leftBlock?.block.borderStyle?.[1] : rightBlock?.block.borderStyle?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
-          if (verticalBorderChar) {
-            const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]?.replace(' ', '')]
-            const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]?.replace(' ', '')]
+          const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]?.replace(' ', '')]
+          const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]?.replace(' ', '')]
 
-            if (!leftBorderChar && rightBorderChar) {
-              border[borderIndex] = BOTTOM_LEFT_CORNER[verticalBorderChar + rightBorderChar]
-            } else if (leftBorderChar && !rightBorderChar) {
-              border[borderIndex] = BOTTOM_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
-            } else if (leftBorderChar && rightBorderChar) {
-              border[borderIndex] = BOTTOM_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
-            } else if (!leftBorderChar && !rightBorderChar) {
-              border[borderIndex] = VERTICAL_BOTTOM_END[verticalBorderChar]
-            }
-
-            borderIndex++
+          if (!leftBorderChar && rightBorderChar) {
+            border[borderIndex] = BOTTOM_LEFT_CORNER[verticalBorderChar + rightBorderChar]
+          } else if (leftBorderChar && !rightBorderChar) {
+            border[borderIndex] = BOTTOM_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
+          } else if (leftBorderChar && rightBorderChar) {
+            border[borderIndex] = BOTTOM_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
+          } else if (!leftBorderChar && !rightBorderChar) {
+            border[borderIndex] = VERTICAL_BOTTOM_END[verticalBorderChar]
           }
+
+          borderIndex++
         }
       }
 
@@ -285,42 +283,40 @@ export default class TerminalDocument extends EventEmitter {
         borderIndex += leftBlock?.width || 0
 
         if (hasVerticalBorder) {
-          const verticalBorderStyle = leftBlock?.block.borderStyle?.[1] || rightBlock?.block.borderStyle?.[3]
+          const verticalBorderStyle = leftBlock?.block.border[1] ? leftBlock?.block.borderStyle?.[1] : rightBlock?.block.borderStyle?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
-          if (verticalBorderChar) {
-            const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]] || HORIZONTAL_LEFT_INFER_MAP[border[borderIndex - 1]]
-            const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]] || HORIZONTAL_RIGHT_INFER_MAP[border[borderIndex + 1]]
-            const aboveVerticalBorderChar = VERTICAL_INFER_MAP[border[borderIndex]]
+          const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]] || HORIZONTAL_LEFT_INFER_MAP[border[borderIndex - 1]]
+          const rightBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex + 1]] || HORIZONTAL_RIGHT_INFER_MAP[border[borderIndex + 1]]
+          const aboveVerticalBorderChar = VERTICAL_INFER_MAP[border[borderIndex]]
 
-            if (!leftBorderChar && rightBorderChar) {
-              if (aboveVerticalBorderChar) {
-                border[borderIndex] = LEFT_JOIN[aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
-              } else {
-                border[borderIndex] = TOP_LEFT_CORNER[verticalBorderChar + rightBorderChar]
-              }
-            } else if (leftBorderChar && !rightBorderChar) {
-              if (aboveVerticalBorderChar) {
-                border[borderIndex] = RIGHT_JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar]
-              } else {
-                border[borderIndex] = TOP_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
-              }
-            } else if (leftBorderChar && rightBorderChar) {
-              if (aboveVerticalBorderChar) {
-                border[borderIndex] = JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
-              } else {
-                border[borderIndex] = TOP_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
-              }
-            } else if (!leftBorderChar && !rightBorderChar) {
-              if (aboveVerticalBorderChar) {
-                border[borderIndex] = VERTICAL_JOIN[aboveVerticalBorderChar + verticalBorderChar]
-              } else {
-                border[borderIndex] = VERTICAL_TOP_END[verticalBorderChar]
-              }
+          if (!leftBorderChar && rightBorderChar) {
+            if (aboveVerticalBorderChar) {
+              border[borderIndex] = LEFT_JOIN[aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
+            } else {
+              border[borderIndex] = TOP_LEFT_CORNER[verticalBorderChar + rightBorderChar]
             }
-
-            borderIndex++
+          } else if (leftBorderChar && !rightBorderChar) {
+            if (aboveVerticalBorderChar) {
+              border[borderIndex] = RIGHT_JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar]
+            } else {
+              border[borderIndex] = TOP_RIGHT_CORNER[leftBorderChar + verticalBorderChar]
+            }
+          } else if (leftBorderChar && rightBorderChar) {
+            if (aboveVerticalBorderChar) {
+              border[borderIndex] = JOIN[leftBorderChar + aboveVerticalBorderChar + verticalBorderChar + rightBorderChar]
+            } else {
+              border[borderIndex] = TOP_JOIN[leftBorderChar + verticalBorderChar + rightBorderChar]
+            }
+          } else if (!leftBorderChar && !rightBorderChar) {
+            if (aboveVerticalBorderChar) {
+              border[borderIndex] = VERTICAL_JOIN[aboveVerticalBorderChar + verticalBorderChar]
+            } else {
+              border[borderIndex] = VERTICAL_TOP_END[verticalBorderChar]
+            }
           }
+
+          borderIndex++
         }
       }
 
@@ -636,6 +632,8 @@ export default class TerminalDocument extends EventEmitter {
           text = style(wrappedLine.text)
           rightFill = backgroundStyle(rightFill)
       }
+    } else {
+      text = style(wrappedLine.text)
     }
 
     if (block.link) {

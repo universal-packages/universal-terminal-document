@@ -20,9 +20,9 @@ const COMBINATIONS: {
     topBorder: [true, false, true, true],
     bottomBorder: [true, true, true, true],
     result: `
-╔═════════╦━━━━━━━━┓
+╔═════════┳━━━━━━━━┓
 ║Hello    ┃World   ┃
-╚═════════╩━━━━━━━━┛`
+╚═════════┻━━━━━━━━┛`
   },
   {
     topBorder: [true, true, true, true],
