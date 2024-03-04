@@ -1,6 +1,6 @@
 import stripAnsi from 'strip-ansi'
 
-import { BlueColor, BrownColor, GrayColor, RedColor, TerminalDocument, WhiteColor } from '../../src'
+import { BlueColor, BrownColor, GrayColor, RedColor, TerminalDocument, WhiteColor } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('renders the document applying formatting', () => {

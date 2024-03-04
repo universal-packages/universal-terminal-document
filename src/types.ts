@@ -3,22 +3,27 @@ import { Padding, TextAlign, VerticalAlign, WrappedLine } from '@universal-packa
 export type BackgroundFill = 'word' | 'text' | 'fill' | 'all'
 export type BlockDescriptorBuilder<V = any> = (value: V, context: Record<string, any>) => BlockDescriptor
 export type Border = boolean | SelectiveBorder
+export type BorderColor = Color | SelectiveBorderColor
 export type BorderStyle = BorderType | SelectiveBorderStyle
 export type BorderType = 'single' | 'single-round' | 'thick' | 'double' | 'dash-2' | 'dash-2-thick' | 'dash-3' | 'dash-3-thick' | 'dash-4' | 'dash-4-thick'
 export type Color = RedColors | PinkColors | OrangeColors | YellowColors | PurpleColors | GreenColors | BlueColors | BrownColors | WhiteColors | GrayColors
 export type InternalBlockDescriptorBuilder = () => BlockDescriptor
 export type SelectiveBorder = [boolean, boolean, boolean, boolean]
+export type SelectiveBorderColor = [Color, Color, Color, Color]
 export type SelectiveBorderStyle = [BorderType, BorderType, BorderType, BorderType]
 export type TextStyle = 'bold' | 'italic' | 'underline' | 'inverse' | 'strikethrough'
 export type With = number | 'fit'
 
 export interface TerminalDocumentOptions {
   blockBorder?: Border
+  blockBorderColor?: BorderColor
   blockBorderStyle?: BorderStyle
   border?: Border
+  borderColor?: BorderColor
   borderStyle?: BorderStyle
   context?: Record<string, any>
   rowBorder?: Border
+  rowBorderColor?: BorderColor
   rowBorderStyle?: BorderStyle
   rows: RowDescriptor[]
   table?: boolean
@@ -30,6 +35,7 @@ export interface RowDescriptor {
   blockBackgroundColor?: Color
   blockBackgroundFill?: BackgroundFill
   blockBorder?: Border
+  blockBorderColor?: BorderColor
   blockBorderStyle?: BorderStyle
   blockColor?: Color
   blockHeight?: number
@@ -38,6 +44,7 @@ export interface RowDescriptor {
   blockVerticalAlign?: VerticalAlign
   blocks: (BlockDescriptor | BlockDescriptorBuilderDescriptor)[]
   border?: Border
+  borderColor?: BorderColor
   borderStyle?: BorderStyle
 }
 
@@ -46,6 +53,7 @@ export interface BlockDescriptor {
   backgroundColor?: Color
   backgroundFill?: BackgroundFill
   border?: Border
+  borderColor?: BorderColor
   borderStyle?: BorderStyle
   color?: Color
   height?: number

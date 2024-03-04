@@ -31,9 +31,12 @@ import {
   BlockDescriptor,
   BlockDescriptorBuilderDescriptor,
   Border,
+  BorderColor,
   BorderStyle,
+  Color,
   InternalBlockDescriptorBuilder,
   SelectiveBorder,
+  SelectiveBorderColor,
   SelectiveBorderStyle,
   TerminalDocumentOptions,
   WrappedBlockDescriptor
@@ -164,15 +167,24 @@ export default class TerminalDocument extends EventEmitter {
         const currentWrappedLine = currentWrappedBlock.lines[j]
 
         if (i === 0 && currentWrappedBlock.block.border[3]) {
-          lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[3]]]
+          lines[j] += this.applyBorderColor(
+            VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[3]]],
+            currentWrappedBlock.block.borderColor?.[3] as Color
+          )
         }
 
         lines[j] += this.synthesizeWrappedLine(currentWrappedLine, currentWrappedBlock.block)
 
         if (currentWrappedBlock.block.border[1]) {
-          lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]]
+          lines[j] += this.applyBorderColor(
+            VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]],
+            currentWrappedBlock.block.borderColor?.[1] as Color
+          )
         } else if (nextWrappedBlock?.block.border[3]) {
-          lines[j] += VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[nextWrappedBlock.block.borderStyle[3]]]
+          lines[j] += this.applyBorderColor(
+            VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[nextWrappedBlock.block.borderStyle[3]]],
+            nextWrappedBlock.block.borderColor?.[3] as Color
+          )
         }
       }
     }
@@ -192,6 +204,7 @@ export default class TerminalDocument extends EventEmitter {
 
     if (anyBorder || anyPreviousBorder) {
       const border = Array(this.documentWidth).fill(' ')
+      const borderColors = Array(this.documentWidth).fill(undefined)
       let borderIndex = 0
 
       for (let i = -1; i < previousWrappedBlocks?.length || 0; i++) {
@@ -212,6 +225,7 @@ export default class TerminalDocument extends EventEmitter {
           const rightBorderStyle = rightBlock.block.borderStyle as SelectiveBorderStyle
 
           border.splice(borderIndex, rightBlock.width, ...Array(rightBlock.width).fill(HORIZONTAL_BORDERS[rightBorderStyle[2]]))
+          borderColors.splice(borderIndex, rightBlock.width, ...Array(rightBlock.width).fill(rightBlock.block.borderColor?.[2]))
         }
 
         borderIndex += rightBlock?.width || 0
@@ -237,6 +251,7 @@ export default class TerminalDocument extends EventEmitter {
           const rightBorderStyle = rightBlock.block.borderStyle as SelectiveBorderStyle
 
           border.splice(borderIndex, rightBlock.width, ...Array(rightBlock.width).fill(HORIZONTAL_BORDERS[rightBorderStyle[0]]))
+          borderColors.splice(borderIndex, rightBlock.width, ...Array(rightBlock.width).fill(rightBlock.block.borderColor?.[0]))
         }
 
         borderIndex += rightBlock?.width || 0
@@ -253,6 +268,7 @@ export default class TerminalDocument extends EventEmitter {
 
         if (hasVerticalBorder) {
           const verticalBorderStyle = leftBlock?.block.border[1] ? leftBlock?.block.borderStyle?.[1] : rightBlock?.block.borderStyle?.[3]
+          const verticalBorderColor = leftBlock?.block.border[1] ? leftBlock?.block.borderColor?.[1] : rightBlock?.block.borderColor?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
           const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]?.replace(' ', '')]
@@ -267,6 +283,8 @@ export default class TerminalDocument extends EventEmitter {
           } else if (!leftBorderChar && !rightBorderChar) {
             border[borderIndex] = VERTICAL_BOTTOM_END[verticalBorderChar]
           }
+
+          borderColors[borderIndex] = verticalBorderColor
 
           borderIndex++
         }
@@ -283,6 +301,7 @@ export default class TerminalDocument extends EventEmitter {
 
         if (hasVerticalBorder) {
           const verticalBorderStyle = leftBlock?.block.border[1] ? leftBlock?.block.borderStyle?.[1] : rightBlock?.block.borderStyle?.[3]
+          const verticalBorderColor = leftBlock?.block.border[1] ? leftBlock?.block.borderColor?.[1] : rightBlock?.block.borderColor?.[3]
           const verticalBorderChar = VERTICAL_BORDERS_ANALOGOUS_MAP[VERTICAL_BORDERS[verticalBorderStyle]]
 
           const leftBorderChar = HORIZONTAL_BORDERS_ANALOGOUS_MAP[border[borderIndex - 1]] || HORIZONTAL_LEFT_INFER_MAP[border[borderIndex - 1]]
@@ -315,20 +334,18 @@ export default class TerminalDocument extends EventEmitter {
             }
           }
 
+          borderColors[borderIndex] = verticalBorderColor
+
           borderIndex++
         }
       }
 
-      let renderedBorder = border.join('')
-      const roundBorderKeys = Object.keys(ROUND_BORDERS_MAP)
-
-      for (let i = 0; i < roundBorderKeys.length; i++) {
-        const roundBorderKey = roundBorderKeys[i]
-
-        renderedBorder = renderedBorder.replace(new RegExp(roundBorderKey, 'g'), ROUND_BORDERS_MAP[roundBorderKey])
+      for (let i = 0; i < border.length; i++) {
+        if (Object.keys(ROUND_BORDERS_MAP).includes(border[i])) border[i] = ROUND_BORDERS_MAP[border[i]]
+        if (borderColors[i]) border[i] = this.applyBorderColor(border[i], borderColors[i])
       }
 
-      return renderedBorder
+      return border.join('')
     }
 
     return ''
@@ -378,6 +395,15 @@ export default class TerminalDocument extends EventEmitter {
               backgroundColor: generatedBlock.backgroundColor || currentRow.blockBackgroundColor,
               backgroundFill: generatedBlock.backgroundFill || currentRow.blockBackgroundFill,
               border: this.calculateBlockBorder(i, rows.length, currentRow.border, currentRow.blockBorder, j, currentRow.blocks.length, generatedBlock.border),
+              borderColor: this.calculateBlockBorderColor(
+                i,
+                rows.length,
+                currentRow.borderColor,
+                currentRow.blockBorderColor,
+                j,
+                currentRow.blocks.length,
+                generatedBlock.borderColor
+              ),
               borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, generatedBlock.borderStyle),
               color: generatedBlock.color || currentRow.blockColor,
               height: generatedBlock.height || currentRow.blockHeight,
@@ -395,6 +421,7 @@ export default class TerminalDocument extends EventEmitter {
             backgroundColor: staticBlock.backgroundColor || currentRow.blockBackgroundColor,
             backgroundFill: staticBlock.backgroundFill || currentRow.blockBackgroundFill,
             border: this.calculateBlockBorder(i, rows.length, currentRow.border, currentRow.blockBorder, j, currentRow.blocks.length, staticBlock.border),
+            borderColor: this.calculateBlockBorderColor(i, rows.length, currentRow.borderColor, currentRow.blockBorderColor, j, currentRow.blocks.length, staticBlock.borderColor),
             borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, staticBlock.borderStyle),
             color: staticBlock.color || currentRow.blockColor,
             height: staticBlock.height || currentRow.blockHeight,
@@ -522,12 +549,63 @@ export default class TerminalDocument extends EventEmitter {
     return [topBorderStyle || 'single', rightBorderStyle || 'single', bottomBorderStyle || 'single', leftBorderStyle || 'single']
   }
 
+  private calculateBlockBorderColor(
+    rowIndex: number,
+    rowCount: number,
+    rowBorderColor: BorderColor,
+    rowBlockBorderColor: BorderColor,
+    blockIndex: number,
+    blockCount: number,
+    blockBorderColor: BorderColor
+  ): SelectiveBorderColor {
+    const documentBorderColor = this.normalizeBorderColor(this.options.borderColor)
+    const documentRowBorderColor = this.normalizeBorderColor(this.options.rowBorderColor)
+    const documentBlockBorderColor = this.normalizeBorderColor(this.options.blockBorderColor)
+    const rowBorderColorNormalized = this.normalizeBorderColor(rowBorderColor)
+    const rowBlockBorderColorNormalized = this.normalizeBorderColor(rowBlockBorderColor)
+    const blockBorderColorNormalized = this.normalizeBorderColor(blockBorderColor)
+
+    const topBorderFromExplicitBlockBorderColor = blockBorderColorNormalized[0] || rowBlockBorderColorNormalized[0] || documentBlockBorderColor[0]
+    const topBorderFromRowBorderColor = rowBorderColorNormalized[0] || documentRowBorderColor[0]
+    const topBorderFromDocumentBorderColor = rowIndex === 0 ? documentBorderColor[0] : undefined
+    const topBorderColor = topBorderFromExplicitBlockBorderColor || topBorderFromRowBorderColor || topBorderFromDocumentBorderColor
+
+    const rightBorderFromExplicitBlockBorderColor = blockBorderColorNormalized[1] || rowBlockBorderColorNormalized[1] || documentBlockBorderColor[1]
+    const rightBorderFromRowBorderColor = blockIndex === blockCount - 1 ? rowBorderColorNormalized[1] || documentRowBorderColor[1] : undefined
+    const rightBorderFromDocumentBorderColor = blockIndex === blockCount - 1 ? documentBorderColor[1] : undefined
+    const rightBorderColor = rightBorderFromExplicitBlockBorderColor || rightBorderFromRowBorderColor || rightBorderFromDocumentBorderColor
+
+    const bottomBorderFromExplicitBlockBorderColor = blockBorderColorNormalized[2] || rowBlockBorderColorNormalized[2] || documentBlockBorderColor[2]
+    const bottomBorderFromRowBorderColor = rowBorderColorNormalized[2] || documentRowBorderColor[2]
+    const bottomBorderFromDocumentBorderColor = rowIndex === rowCount - 1 ? documentBorderColor[2] : undefined
+    const bottomBorderColor = bottomBorderFromExplicitBlockBorderColor || bottomBorderFromRowBorderColor || bottomBorderFromDocumentBorderColor
+
+    const leftBorderFromExplicitBlockBorderColor = blockBorderColorNormalized[3] || rowBlockBorderColorNormalized[3] || documentBlockBorderColor[3]
+    const leftBorderFromRowBorderColor = blockIndex === 0 ? rowBorderColorNormalized[3] || documentRowBorderColor[3] : undefined
+    const leftBorderFromDocumentBorderColor = blockIndex === 0 ? documentBorderColor[3] : undefined
+    const leftBorderColor = leftBorderFromExplicitBlockBorderColor || leftBorderFromRowBorderColor || leftBorderFromDocumentBorderColor
+
+    return [topBorderColor, rightBorderColor, bottomBorderColor, leftBorderColor]
+  }
+
   private normalizeBorderStyle(borderStyle?: BorderStyle): SelectiveBorderStyle {
     if (borderStyle) {
       if (typeof borderStyle === 'string') {
         return [borderStyle, borderStyle, borderStyle, borderStyle]
       } else {
         return [borderStyle[0], borderStyle[1], borderStyle[2], borderStyle[3]]
+      }
+    } else {
+      return [undefined, undefined, undefined, undefined]
+    }
+  }
+
+  private normalizeBorderColor(borderColor?: BorderColor): SelectiveBorderColor {
+    if (borderColor) {
+      if (typeof borderColor === 'string') {
+        return [borderColor, borderColor, borderColor, borderColor]
+      } else {
+        return [borderColor[0], borderColor[1], borderColor[2], borderColor[3]]
       }
     } else {
       return [undefined, undefined, undefined, undefined]
@@ -577,6 +655,12 @@ export default class TerminalDocument extends EventEmitter {
     lines.splice(topPaddingTextEdgeIndex, 0, ...topPaddingLines)
 
     return lines
+  }
+
+  private applyBorderColor(borderFragment: string, color: Color): string {
+    if (color) return chalk.hex(COLORS[color])(borderFragment)
+
+    return borderFragment
   }
 
   private synthesizeWrappedLine(wrappedLine: WrappedLine, block: BlockDescriptor): string {
