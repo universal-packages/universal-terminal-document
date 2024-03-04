@@ -123,7 +123,10 @@ describe(TerminalDocument, () => {
 
 - Se lava la carita con agua.. y con jabón..`,
               padding: [1, 0, 0, 10],
-              style: ['bold', 'inverse']
+              style: 'bold',
+              backgroundFill: 'text',
+              backgroundColor: WhiteColor.AliceBlue,
+              color: GrayColor.Black
             }
           ]
         }
@@ -136,6 +139,7 @@ describe(TerminalDocument, () => {
 
     // Check visually the output
     // console.log(document.output)
+    // console.log(JSON.stringify(document.output.split('\n')))
 
     if (process.env.CI) {
       expect(stripAnsi(document.output).split('\n')).toEqual([
@@ -216,21 +220,21 @@ describe(TerminalDocument, () => {
         '╏                                                                              ╏',
         '╏                                         \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mEntonces\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mcuentame!\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mQuién\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19mlos\u001b[49m\u001b[27m\u001b[22m\u001b[39m \u001b[38;2;0;0;0m\u001b[1m\u001b[7m\u001b[48;2;139;69;19moculta?!\u001b[49m\u001b[27m\u001b[22m\u001b[39m╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- De acuerdo.. te lo cuento ¿Tú conoces a pin pon?\u001b[27m\u001b[22m                  ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- De acuerdo.. te lo cuento ¿Tú conoces a pin pon?\u001b[49m\u001b[22m\u001b[39m                  ╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- A pin pon?\u001b[27m\u001b[22m                                                        ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- A pin pon?\u001b[49m\u001b[22m\u001b[39m                                                        ╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- Si pin pon..\u001b[27m\u001b[22m                                                      ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- Si pin pon..\u001b[49m\u001b[22m\u001b[39m                                                      ╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- Si.. es un muñeco muy guapo y de cartón\u001b[27m\u001b[22m                           ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- Si.. es un muñeco muy guapo y de cartón\u001b[49m\u001b[22m\u001b[39m                           ╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- Si.. se lava su carita con agua y con jabón\u001b[27m\u001b[22m                       ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- Si.. se lava su carita con agua y con jabón\u001b[49m\u001b[22m\u001b[39m                       ╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- ¿!Con agua y con jabón¡?\u001b[27m\u001b[22m                                          ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- ¿!Con agua y con jabón¡?\u001b[49m\u001b[22m\u001b[39m                                          ╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- Si se lava la carita!!\u001b[27m\u001b[22m                                            ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- Si se lava la carita!!\u001b[49m\u001b[22m\u001b[39m                                            ╏',
         '╏                                                                              ╏',
-        '╏          \u001b[1m\u001b[7m- Se lava la carita con agua.. y con jabón..\u001b[27m\u001b[22m                        ╏',
+        '╏          \u001b[38;2;0;0;0m\u001b[1m\u001b[48;2;240;248;255m- Se lava la carita con agua.. y con jabón..\u001b[49m\u001b[22m\u001b[39m                        ╏',
         '┗╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┛'
       ])
     }
