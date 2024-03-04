@@ -18,7 +18,7 @@ describe(TerminalDocument, () => {
       width: 20
     })
 
-    terminalDocument.render()
+    terminalDocument.update()
 
     expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
 This is a block     `)
