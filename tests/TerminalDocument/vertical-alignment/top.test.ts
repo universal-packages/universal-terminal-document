@@ -3,12 +3,12 @@ import stripAnsi from 'strip-ansi'
 import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
-  it('aligns text to the left by default', () => {
+  it('vertically aligns text to the top by default', () => {
     const document = new TerminalDocument({
       rows: [
         {
           blocks: [
-            { border: true, text: 'Some text' },
+            { border: true, text: 'Some multiple\ntext that is\nlonger than\none line' },
             { border: true, text: 'Some other text' }
           ]
         }
@@ -20,18 +20,20 @@ describe(TerminalDocument, () => {
 
     expect('\n' + stripAnsi(document.output)).toEqual(`
 ┌──────────────┬─────────────┐
-│Some text     │Some other   │
-│              │text         │
+│Some multiple │Some other   │
+│text that is  │text         │
+│longer than   │             │
+│one line      │             │
 └──────────────┴─────────────┘`)
   })
 
-  it('align text to the left', () => {
+  it('vertically aligns text to the top', () => {
     const document = new TerminalDocument({
       rows: [
         {
           blocks: [
-            { border: true, text: 'Some text', align: 'left' },
-            { border: true, text: 'Some other text', align: 'left' }
+            { border: true, text: 'Some multiple\ntext that is\nlonger than\none line', verticalAlign: 'top' },
+            { border: true, text: 'Some other text', verticalAlign: 'top' }
           ]
         }
       ],
@@ -42,8 +44,10 @@ describe(TerminalDocument, () => {
 
     expect('\n' + stripAnsi(document.output)).toEqual(`
 ┌──────────────┬─────────────┐
-│Some text     │Some other   │
-│              │text         │
+│Some multiple │Some other   │
+│text that is  │text         │
+│longer than   │             │
+│one line      │             │
 └──────────────┴─────────────┘`)
   })
 })

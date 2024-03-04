@@ -217,8 +217,6 @@ export default class TerminalDocument extends EventEmitter {
         borderIndex += rightBlock?.width || 0
       }
 
-      // console.log(border.join('').replace(/ /g, '.'))
-
       borderIndex = 0
 
       for (let i = -1; i < wrappedBlocks?.length || 0; i++) {
@@ -243,8 +241,6 @@ export default class TerminalDocument extends EventEmitter {
 
         borderIndex += rightBlock?.width || 0
       }
-
-      // console.log(border.join('').replace(/ /g, '.'))
 
       borderIndex = 0
 
@@ -275,8 +271,6 @@ export default class TerminalDocument extends EventEmitter {
           borderIndex++
         }
       }
-
-      // console.log(border.join('').replace(/ /g, '.'))
 
       borderIndex = 0
 
@@ -325,8 +319,6 @@ export default class TerminalDocument extends EventEmitter {
         }
       }
 
-      // console.log(border.join('').replace(/ /g, '.'))
-
       let renderedBorder = border.join('')
       const roundBorderKeys = Object.keys(ROUND_BORDERS_MAP)
 
@@ -335,8 +327,6 @@ export default class TerminalDocument extends EventEmitter {
 
         renderedBorder = renderedBorder.replace(new RegExp(roundBorderKey, 'g'), ROUND_BORDERS_MAP[roundBorderKey])
       }
-
-      // console.log('Next')
 
       return renderedBorder
     }
@@ -556,8 +546,9 @@ export default class TerminalDocument extends EventEmitter {
 
   private fillHeight(lines: WrappedLine[], height: number, verticalAlign: VerticalAlign): WrappedLine[] {
     const [topPadding, bottomPadding] = this.calculateVerticalAlignmentExtraFill(height, lines.length, verticalAlign)
-    const topPaddingTextEdgeIndex = lines.indexOf(lines.find((line) => !!line.leftFill || !!line.text || !!line.rightFill))
-    const bottomPaddingTextEdgeIndex = lines.lastIndexOf(lines.find((line) => !!line.leftFill || !!line.text || !!line.rightFill))
+    const topPaddingTextEdgeIndex = lines.indexOf(lines.find((line) => line.leftFill || line.text || line.rightFill))
+    const bottomPaddingTextEdgeIndex = lines.lastIndexOf(lines.findLast((line) => line.leftFill || line.text || line.rightFill))
+
     const topPaddingTextEdgeLine = lines[topPaddingTextEdgeIndex]
     const lineFill = topPaddingTextEdgeLine.leftFill + topPaddingTextEdgeLine.text.length + topPaddingTextEdgeLine.rightFill
     const leftLineFill = Math.floor(lineFill / 2)
@@ -582,8 +573,8 @@ export default class TerminalDocument extends EventEmitter {
       text: ''
     })
 
+    lines.splice(bottomPaddingTextEdgeIndex + 1, 0, ...bottomPaddingLines)
     lines.splice(topPaddingTextEdgeIndex, 0, ...topPaddingLines)
-    lines.splice(bottomPaddingTextEdgeIndex + 2, 0, ...bottomPaddingLines)
 
     return lines
   }

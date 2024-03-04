@@ -3,13 +3,13 @@ import stripAnsi from 'strip-ansi'
 import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
-  it('aligns text to the right', () => {
+  it('vertically aligns text to the bottom', () => {
     const document = new TerminalDocument({
       rows: [
         {
           blocks: [
-            { border: true, text: 'Some text', align: 'right' },
-            { border: true, text: 'Some other text', align: 'right' }
+            { border: true, text: 'Some multiple\ntext that is\nlonger than\none line', verticalAlign: 'bottom' },
+            { border: true, text: 'Some other text', verticalAlign: 'bottom' }
           ]
         }
       ],
@@ -20,8 +20,10 @@ describe(TerminalDocument, () => {
 
     expect('\n' + stripAnsi(document.output)).toEqual(`
 ┌──────────────┬─────────────┐
-│     Some text│   Some other│
-│              │         text│
+│Some multiple │             │
+│text that is  │             │
+│longer than   │Some other   │
+│one line      │text         │
 └──────────────┴─────────────┘`)
   })
 })

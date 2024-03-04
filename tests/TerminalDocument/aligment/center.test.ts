@@ -3,7 +3,7 @@ import stripAnsi from 'strip-ansi'
 import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
-  it('align text to the center', () => {
+  it('aligns text to the center', () => {
     const document = new TerminalDocument({
       rows: [
         {
