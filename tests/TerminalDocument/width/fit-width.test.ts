@@ -4,7 +4,7 @@ import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('makes sure the block has the same width as the text', () => {
-    const document = new TerminalDocument({
+    const terminalDocument = new TerminalDocument({
       rows: [
         {
           blocks: [
@@ -16,9 +16,9 @@ describe(TerminalDocument, () => {
       width: 30
     })
 
-    document.update()
+    terminalDocument.render()
 
-    expect('\n' + stripAnsi(document.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
 ┌─────────┬─────────────────────┐
 │Some Text│Other text           │
 │         │Some other large text│

@@ -2590,7 +2590,7 @@ describe(TerminalDocument, (): void => {
         ])
       )
 
-      terminalDocument.update()
+      terminalDocument.render()
 
       expect('\n' + stripAnsi(terminalDocument.output)).toBe(currentCombination.result)
     })

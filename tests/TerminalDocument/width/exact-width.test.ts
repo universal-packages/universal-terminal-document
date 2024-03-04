@@ -4,7 +4,7 @@ import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('gives the block an exact width', () => {
-    const document = new TerminalDocument({
+    const terminalDocument = new TerminalDocument({
       rows: [
         {
           blocks: [{ border: true, text: 'Give this 10 exactly width', width: 10 }]
@@ -13,9 +13,9 @@ describe(TerminalDocument, () => {
       width: 30
     })
 
-    document.update()
+    terminalDocument.render()
 
-    expect('\n' + stripAnsi(document.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
 ┌──────────┐                  
 │Give this │                  
 │10 exactly│                  

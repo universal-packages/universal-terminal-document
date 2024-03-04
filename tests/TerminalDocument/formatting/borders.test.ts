@@ -4,7 +4,7 @@ import { BlueColor, PurpleColor, RedColor, TerminalDocument } from '../../../src
 
 describe(TerminalDocument, () => {
   it('renders borders with a formatting', () => {
-    const document = new TerminalDocument({
+    const terminalDocument = new TerminalDocument({
       rows: [
         {
           blocks: [
@@ -18,14 +18,14 @@ describe(TerminalDocument, () => {
       blockBorderStyle: 'dash-2-thick'
     })
 
-    document.update()
+    terminalDocument.render()
 
     // Check visually the output
-    // console.log(document.output)
-    // console.log(JSON.stringify(document.output.split('\n')))
+    // console.log(terminalDocument.output)
+    // console.log(JSON.stringify(terminalDocument.output.split('\n')))
 
     if (process.env.CI) {
-      expect(stripAnsi(document.output).split('\n')).toEqual([
+      expect(stripAnsi(terminalDocument.output).split('\n')).toEqual([
         '┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┳╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┳╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┓',
         '╏Mjjm! Corre corre corre.. ╏  No me podras atrapar   ╏         SOY EL HOMBRE DE╏',
         '╏que nadie te pueda        ╏                         ╏                JENGIBRE!╏',
@@ -33,7 +33,7 @@ describe(TerminalDocument, () => {
         '┗╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┻╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┻╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┛'
       ])
     } else {
-      expect(document.output.split('\n')).toEqual([
+      expect(terminalDocument.output.split('\n')).toEqual([
         '\u001b[38;2;220;20;60m┏\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m╍\u001b[39m\u001b[38;2;220;20;60m┳\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m╍\u001b[39m\u001b[38;2;0;0;128m┳\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m╍\u001b[39m\u001b[38;2;186;85;211m┓\u001b[39m',
         '\u001b[38;2;220;20;60m╏\u001b[39mMjjm! Corre corre corre.. \u001b[38;2;220;20;60m╏\u001b[39m  No me podras atrapar   \u001b[38;2;0;0;128m╏\u001b[39m         SOY EL HOMBRE DE\u001b[38;2;186;85;211m╏\u001b[39m',
         '\u001b[38;2;220;20;60m╏\u001b[39mque nadie te pueda        \u001b[38;2;220;20;60m╏\u001b[39m                         \u001b[38;2;0;0;128m╏\u001b[39m                JENGIBRE!\u001b[38;2;186;85;211m╏\u001b[39m',

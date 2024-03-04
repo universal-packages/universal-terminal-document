@@ -4,7 +4,7 @@ import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('normalize border arrays to not throw if there are inconsistencies', () => {
-    const document = new TerminalDocument({
+    const terminalDocument = new TerminalDocument({
       rows: [
         {
           blocks: [
@@ -17,9 +17,9 @@ describe(TerminalDocument, () => {
       width: 20
     })
 
-    document.update()
+    terminalDocument.render()
 
-    expect('\n' + stripAnsi(document.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
 Some                
 multiple            
 text that           

@@ -1,13 +1,11 @@
 import { Padding, TextAlign, VerticalAlign, WrappedLine } from '@universal-packages/text-wrap'
 
 export type BackgroundFill = 'word' | 'text' | 'fill' | 'all'
-export type BlockDescriptorBuilder<V = any> = (value: V, context: Record<string, any>) => BlockDescriptor
 export type Border = boolean | SelectiveBorder
 export type BorderColor = Color | SelectiveBorderColor
 export type BorderStyle = BorderType | SelectiveBorderStyle
 export type BorderType = 'single' | 'single-round' | 'thick' | 'double' | 'dash-2' | 'dash-2-thick' | 'dash-3' | 'dash-3-thick' | 'dash-4' | 'dash-4-thick'
 export type Color = RedColors | PinkColors | OrangeColors | YellowColors | PurpleColors | GreenColors | BlueColors | BrownColors | WhiteColors | GrayColors
-export type InternalBlockDescriptorBuilder = () => BlockDescriptor
 export type SelectiveBorder = [boolean, boolean, boolean, boolean]
 export type SelectiveBorderColor = [Color, Color, Color, Color]
 export type SelectiveBorderStyle = [BorderType, BorderType, BorderType, BorderType]
@@ -42,7 +40,7 @@ export interface RowDescriptor {
   blockPadding?: Padding
   blockStyle?: TextStyle | TextStyle[]
   blockVerticalAlign?: VerticalAlign
-  blocks: (BlockDescriptor | BlockDescriptorBuilderDescriptor)[]
+  blocks: BlockDescriptor[]
   border?: Border
   borderColor?: BorderColor
   borderStyle?: BorderStyle
@@ -57,17 +55,13 @@ export interface BlockDescriptor {
   borderStyle?: BorderStyle
   color?: Color
   height?: number
+  id?: string
   link?: string
   padding?: Padding
   style?: TextStyle | TextStyle[]
   text: string
   verticalAlign?: VerticalAlign
   width?: With
-}
-
-export interface BlockDescriptorBuilderDescriptor {
-  id: string
-  builder: BlockDescriptorBuilder
 }
 
 export interface WrappedBlockDescriptor {

@@ -113,7 +113,7 @@ describe(TerminalDocument, (): void => {
     it(`renders the corner combination [${i}]`, async (): Promise<void> => {
       const terminalDocument = new TerminalDocument(blockDocument({ border: [true, true, false, false], borderStyle: currentCombination.borderStyle }))
 
-      terminalDocument.update()
+      terminalDocument.render()
 
       expect('\n' + stripAnsi(terminalDocument.output)).toBe(currentCombination.result)
     })

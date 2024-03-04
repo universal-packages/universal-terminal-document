@@ -29,12 +29,10 @@ import {
 import { COLORS } from './colors'
 import {
   BlockDescriptor,
-  BlockDescriptorBuilderDescriptor,
   Border,
   BorderColor,
   BorderStyle,
   Color,
-  InternalBlockDescriptorBuilder,
   SelectiveBorder,
   SelectiveBorderColor,
   SelectiveBorderStyle,
@@ -51,8 +49,7 @@ export default class TerminalDocument extends EventEmitter {
     return this.internalOutput || ''
   }
 
-  private context: Record<string, any>
-  private template: (BlockDescriptor | InternalBlockDescriptorBuilder)[][] = []
+  private template: BlockDescriptor[][] = []
   private internalOutput: string
   private documentWidth: number
 
@@ -60,21 +57,20 @@ export default class TerminalDocument extends EventEmitter {
     super()
 
     this.options = { context: {}, width: 80, ...options }
-    this.context = this.options.context
     this.documentWidth = this.options.width
     this.generateTemplate()
   }
 
-  public update(context?: Record<string, any>): void {
-    if (context) this.context = context
+  public update(): void {
+    this.render()
+  }
 
-    const evaluatedTemplateBlocks = this.evaluateTemplate()
-
+  public render(): void {
     this.internalOutput = ''
 
     if (this.options.table) {
     } else {
-      const wrappedBlocks: WrappedBlockDescriptor[][] = evaluatedTemplateBlocks.map((rowBlocks) => this.generateWrappedBlocks(rowBlocks))
+      const wrappedBlocks: WrappedBlockDescriptor[][] = this.template.map((rowBlocks) => this.generateWrappedBlocks(rowBlocks))
 
       for (let i = 0; i < wrappedBlocks.length; i++) {
         const currentWrappedBlocks = wrappedBlocks[i]
@@ -351,88 +347,32 @@ export default class TerminalDocument extends EventEmitter {
     return ''
   }
 
-  private evaluateTemplate(): BlockDescriptor[][] {
-    const evaluatedTemplate = []
-
-    for (let i = 0; i < this.template.length; i++) {
-      const currentRow = this.template[i]
-      const evaluatedRow = []
-
-      for (let j = 0; j < currentRow.length; j++) {
-        const currentBlock = currentRow[j]
-
-        if (typeof currentBlock === 'function') {
-          evaluatedRow.push(currentBlock())
-        } else {
-          evaluatedRow.push(currentBlock)
-        }
-      }
-
-      evaluatedTemplate.push(evaluatedRow)
-    }
-
-    return evaluatedTemplate
-  }
-
   private generateTemplate(): void {
     const { rows } = this.options
 
     for (let i = 0; i < rows.length; i++) {
       const currentRow = rows[i]
-      const templateBlocks: (BlockDescriptor | InternalBlockDescriptorBuilder)[] = []
+      const templateBlocks: BlockDescriptor[] = []
 
       for (let j = 0; j < currentRow.blocks.length; j++) {
-        const generableBlock = currentRow.blocks[j] as BlockDescriptorBuilderDescriptor
-        const staticBlock = currentRow.blocks[j] as BlockDescriptor
+        const currentBlock = currentRow.blocks[j]
 
-        if (generableBlock.builder) {
-          templateBlocks.push((): BlockDescriptor => {
-            const value = this.context[generableBlock.id]
-            const generatedBlock = generableBlock.builder(value, this.context)
-
-            return {
-              align: generatedBlock.align || currentRow.blockAlign,
-              backgroundColor: generatedBlock.backgroundColor || currentRow.blockBackgroundColor,
-              backgroundFill: generatedBlock.backgroundFill || currentRow.blockBackgroundFill,
-              border: this.calculateBlockBorder(i, rows.length, currentRow.border, currentRow.blockBorder, j, currentRow.blocks.length, generatedBlock.border),
-              borderColor: this.calculateBlockBorderColor(
-                i,
-                rows.length,
-                currentRow.borderColor,
-                currentRow.blockBorderColor,
-                j,
-                currentRow.blocks.length,
-                generatedBlock.borderColor
-              ),
-              borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, generatedBlock.borderStyle),
-              color: generatedBlock.color || currentRow.blockColor,
-              height: generatedBlock.height || currentRow.blockHeight,
-              link: generatedBlock.link,
-              padding: generatedBlock.padding || currentRow.blockPadding,
-              style: generatedBlock.style || currentRow.blockStyle,
-              text: generatedBlock.text,
-              verticalAlign: generatedBlock.verticalAlign || currentRow.blockVerticalAlign,
-              width: generatedBlock.width
-            }
-          })
-        } else {
-          templateBlocks.push({
-            align: staticBlock.align || currentRow.blockAlign,
-            backgroundColor: staticBlock.backgroundColor || currentRow.blockBackgroundColor,
-            backgroundFill: staticBlock.backgroundFill || currentRow.blockBackgroundFill,
-            border: this.calculateBlockBorder(i, rows.length, currentRow.border, currentRow.blockBorder, j, currentRow.blocks.length, staticBlock.border),
-            borderColor: this.calculateBlockBorderColor(i, rows.length, currentRow.borderColor, currentRow.blockBorderColor, j, currentRow.blocks.length, staticBlock.borderColor),
-            borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, staticBlock.borderStyle),
-            color: staticBlock.color || currentRow.blockColor,
-            height: staticBlock.height || currentRow.blockHeight,
-            link: staticBlock.link,
-            padding: staticBlock.padding || currentRow.blockPadding,
-            style: staticBlock.style || currentRow.blockStyle,
-            text: staticBlock.text,
-            verticalAlign: staticBlock.verticalAlign || currentRow.blockVerticalAlign,
-            width: staticBlock.width
-          })
-        }
+        templateBlocks.push({
+          align: currentBlock.align || currentRow.blockAlign,
+          backgroundColor: currentBlock.backgroundColor || currentRow.blockBackgroundColor,
+          backgroundFill: currentBlock.backgroundFill || currentRow.blockBackgroundFill,
+          border: this.calculateBlockBorder(i, rows.length, currentRow.border, currentRow.blockBorder, j, currentRow.blocks.length, currentBlock.border),
+          borderColor: this.calculateBlockBorderColor(i, rows.length, currentRow.borderColor, currentRow.blockBorderColor, j, currentRow.blocks.length, currentBlock.borderColor),
+          borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, currentBlock.borderStyle),
+          color: currentBlock.color || currentRow.blockColor,
+          height: currentBlock.height || currentRow.blockHeight,
+          link: currentBlock.link,
+          padding: currentBlock.padding || currentRow.blockPadding,
+          style: currentBlock.style || currentRow.blockStyle,
+          text: currentBlock.text,
+          verticalAlign: currentBlock.verticalAlign || currentRow.blockVerticalAlign,
+          width: currentBlock.width
+        })
       }
 
       this.template.push(templateBlocks)
