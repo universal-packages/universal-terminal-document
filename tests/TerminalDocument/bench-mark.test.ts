@@ -8,7 +8,7 @@ describe(TerminalDocument, () => {
     const start = Date.now()
 
     for (let i = 0; i < 240; i++) {
-      terminalDocument.update()
+      terminalDocument.render()
     }
 
     const end = Date.now()

@@ -36,6 +36,7 @@ import {
   SelectiveBorder,
   SelectiveBorderColor,
   SelectiveBorderStyle,
+  TemplateUpdaters,
   TerminalDocumentOptions,
   WrappedBlockDescriptor
 } from './types'
@@ -50,6 +51,7 @@ export default class TerminalDocument extends EventEmitter {
   }
 
   private template: BlockDescriptor[][] = []
+  private templateUpdaters: TemplateUpdaters = {}
   private internalOutput: string
   private documentWidth: number
 
@@ -61,7 +63,15 @@ export default class TerminalDocument extends EventEmitter {
     this.generateTemplate()
   }
 
-  public update(): void {
+  public update(id: string, descriptor: Omit<Partial<BlockDescriptor>, 'id'>): void {
+    const updater = this.templateUpdaters[id]
+
+    if (updater) {
+      updater(descriptor)
+    } else {
+      // Warning id not found
+    }
+
     this.render()
   }
 
@@ -356,8 +366,7 @@ export default class TerminalDocument extends EventEmitter {
 
       for (let j = 0; j < currentRow.blocks.length; j++) {
         const currentBlock = currentRow.blocks[j]
-
-        templateBlocks.push({
+        const fullBlock: BlockDescriptor = {
           align: currentBlock.align || currentRow.blockAlign,
           backgroundColor: currentBlock.backgroundColor || currentRow.blockBackgroundColor,
           backgroundFill: currentBlock.backgroundFill || currentRow.blockBackgroundFill,
@@ -366,13 +375,63 @@ export default class TerminalDocument extends EventEmitter {
           borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, currentBlock.borderStyle),
           color: currentBlock.color || currentRow.blockColor,
           height: currentBlock.height || currentRow.blockHeight,
+          id: currentBlock.id,
           link: currentBlock.link,
           padding: currentBlock.padding || currentRow.blockPadding,
           style: currentBlock.style || currentRow.blockStyle,
           text: currentBlock.text,
           verticalAlign: currentBlock.verticalAlign || currentRow.blockVerticalAlign,
           width: currentBlock.width
-        })
+        }
+
+        if (fullBlock.id) {
+          if (this.templateUpdaters[fullBlock.id]) {
+            // Warning same ID
+          } else {
+            this.templateUpdaters[fullBlock.id] = (newBlock) => {
+              fullBlock.align = newBlock.align === null ? null : newBlock.align || fullBlock.align
+              fullBlock.backgroundColor = newBlock.backgroundColor === null ? null : newBlock.backgroundColor || fullBlock.backgroundColor
+              fullBlock.backgroundFill = newBlock.backgroundFill === null ? null : newBlock.backgroundFill || fullBlock.backgroundFill
+              fullBlock.border = this.calculateBlockBorder(
+                i,
+                rows.length,
+                currentRow.border,
+                currentRow.blockBorder,
+                j,
+                currentRow.blocks.length,
+                newBlock.border === null ? null : newBlock.border || fullBlock.border
+              )
+              fullBlock.borderColor = this.calculateBlockBorderColor(
+                i,
+                rows.length,
+                currentRow.borderColor,
+                currentRow.blockBorderColor,
+                j,
+                currentRow.blocks.length,
+                newBlock.borderColor === null ? null : newBlock.borderColor || fullBlock.borderColor
+              )
+              fullBlock.borderStyle = this.calculateBlockBorderStyle(
+                i,
+                rows.length,
+                currentRow.borderStyle,
+                currentRow.borderStyle,
+                j,
+                currentRow.blocks.length,
+                newBlock.borderStyle === null ? null : newBlock.borderStyle || fullBlock.borderStyle
+              )
+              fullBlock.color = newBlock.color === null ? null : newBlock.color || fullBlock.color
+              fullBlock.height = newBlock.height === null ? null : newBlock.height || fullBlock.height
+              fullBlock.link = newBlock.link === null ? null : newBlock.link || fullBlock.link
+              fullBlock.padding = newBlock.padding === null ? null : newBlock.padding || fullBlock.padding
+              fullBlock.style = newBlock.style === null ? null : newBlock.style || fullBlock.style
+              fullBlock.text = newBlock.text || fullBlock.text
+              fullBlock.verticalAlign = newBlock.verticalAlign === null ? null : newBlock.verticalAlign || fullBlock.verticalAlign
+              fullBlock.width = newBlock.width === null ? null : newBlock.width || fullBlock.width
+            }
+          }
+        }
+
+        templateBlocks.push(fullBlock)
       }
 
       this.template.push(templateBlocks)

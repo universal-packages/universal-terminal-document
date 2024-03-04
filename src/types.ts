@@ -84,6 +84,10 @@ export interface BorderDescriptor {
   vertical: string
 }
 
+export interface TemplateUpdaters {
+  [key: string]: (block: Omit<Partial<BlockDescriptor>, 'id'>) => void
+}
+
 export enum RedColor {
   IndianRed = 'indian-red',
   LightCoral = 'light-coral',
