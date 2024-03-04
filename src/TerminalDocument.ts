@@ -177,6 +177,12 @@ export default class TerminalDocument extends EventEmitter {
       }
     }
 
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].length < this.documentWidth) {
+        lines[i] += ' '.repeat(this.documentWidth - lines[i].length)
+      }
+    }
+
     return lines
   }
 
