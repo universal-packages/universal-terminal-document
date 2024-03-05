@@ -16,34 +16,42 @@ export interface TerminalDocumentOptions {
   blockBorder?: Border
   blockBorderColor?: BorderColor
   blockBorderStyle?: BorderStyle
+  blockPadding?: Padding
+  align?: TextAlign
+  backgroundColor?: Color
+  backgroundFill?: BackgroundFill
   border?: Border
   borderColor?: BorderColor
   borderStyle?: BorderStyle
-  context?: Record<string, any>
+  color?: Color
+  padding?: Padding
   rowBorder?: Border
   rowBorderColor?: BorderColor
   rowBorderStyle?: BorderStyle
+  rowPadding?: Padding
   rows: RowDescriptor[]
-  table?: boolean
+  style?: TextStyle | TextStyle[]
+  verticalAlign?: VerticalAlign
   width?: number
 }
 
 export interface RowDescriptor {
-  blockAlign?: TextAlign
-  blockBackgroundColor?: Color
-  blockBackgroundFill?: BackgroundFill
+  align?: TextAlign
+  backgroundColor?: Color
+  backgroundFill?: BackgroundFill
   blockBorder?: Border
   blockBorderColor?: BorderColor
   blockBorderStyle?: BorderStyle
-  blockColor?: Color
-  blockHeight?: number
   blockPadding?: Padding
-  blockStyle?: TextStyle | TextStyle[]
-  blockVerticalAlign?: VerticalAlign
   blocks: BlockDescriptor[]
   border?: Border
   borderColor?: BorderColor
   borderStyle?: BorderStyle
+  color?: Color
+  height?: number
+  padding?: Padding
+  style?: TextStyle | TextStyle[]
+  verticalAlign?: VerticalAlign
 }
 
 export interface BlockDescriptor {

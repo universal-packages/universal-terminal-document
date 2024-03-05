@@ -1,4 +1,4 @@
-import { VerticalAlign, WrapTextOptions, WrappedLine, synthesizeWrappedLine, wrap } from '@universal-packages/text-wrap'
+import { NumericSides, Padding, VerticalAlign, WrapTextOptions, WrappedLine, normalizeNumericSides, synthesizeWrappedLine, wrap } from '@universal-packages/text-wrap'
 import ansiScapes from 'ansi-escapes'
 import chalk from 'chalk'
 import EventEmitter from 'events'
@@ -60,7 +60,7 @@ export default class TerminalDocument extends EventEmitter {
   public constructor(options: TerminalDocumentOptions) {
     super()
 
-    this.options = { context: {}, width: 80, ...options }
+    this.options = { width: 80, ...options }
     this.documentWidth = this.options.width
   }
 
@@ -83,23 +83,20 @@ export default class TerminalDocument extends EventEmitter {
 
     this.renderedDocument = ''
 
-    if (this.options.table) {
-    } else {
-      const wrappedBlocks: WrappedBlockDescriptor[][] = this.template.map((rowBlocks) => this.generateWrappedBlocks(rowBlocks))
+    const wrappedBlocks: WrappedBlockDescriptor[][] = this.template.map((rowBlocks) => this.generateWrappedBlocks(rowBlocks))
 
-      for (let i = 0; i < wrappedBlocks.length; i++) {
-        const currentWrappedBlocks = wrappedBlocks[i]
-        const previousWrappedBlocks = wrappedBlocks[i - 1]
-        const topBorderLine = this.generateBorderLine(currentWrappedBlocks, previousWrappedBlocks)
+    for (let i = 0; i < wrappedBlocks.length; i++) {
+      const currentWrappedBlocks = wrappedBlocks[i]
+      const previousWrappedBlocks = wrappedBlocks[i - 1]
+      const topBorderLine = this.generateBorderLine(currentWrappedBlocks, previousWrappedBlocks)
 
-        this.renderedDocument += topBorderLine ? topBorderLine + '\n' : ''
-        this.renderedDocument += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n') + (i < wrappedBlocks.length - 1 ? '\n' : '')
-      }
-
-      const lastBorderLine = this.generateBorderLine(undefined, wrappedBlocks[wrappedBlocks.length - 1])
-
-      this.renderedDocument += lastBorderLine ? '\n' + lastBorderLine : ''
+      this.renderedDocument += topBorderLine ? topBorderLine + '\n' : ''
+      this.renderedDocument += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n') + (i < wrappedBlocks.length - 1 ? '\n' : '')
     }
+
+    const lastBorderLine = this.generateBorderLine(undefined, wrappedBlocks[wrappedBlocks.length - 1])
+
+    this.renderedDocument += lastBorderLine ? '\n' + lastBorderLine : ''
 
     return this.renderedDocument
   }
@@ -381,20 +378,20 @@ export default class TerminalDocument extends EventEmitter {
       for (let j = 0; j < currentRow.blocks.length; j++) {
         const currentBlock = currentRow.blocks[j]
         const fullBlock: BlockDescriptor = {
-          align: currentBlock.align || currentRow.blockAlign,
-          backgroundColor: currentBlock.backgroundColor || currentRow.blockBackgroundColor,
-          backgroundFill: currentBlock.backgroundFill || currentRow.blockBackgroundFill,
+          align: currentBlock.align || currentRow.align,
+          backgroundColor: currentBlock.backgroundColor || currentRow.backgroundColor || this.options.backgroundColor,
+          backgroundFill: currentBlock.backgroundFill || currentRow.backgroundFill || this.options.backgroundFill,
           border: this.calculateBlockBorder(i, rows.length, currentRow.border, currentRow.blockBorder, j, currentRow.blocks.length, currentBlock.border),
           borderColor: this.calculateBlockBorderColor(i, rows.length, currentRow.borderColor, currentRow.blockBorderColor, j, currentRow.blocks.length, currentBlock.borderColor),
           borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, currentBlock.borderStyle),
-          color: currentBlock.color || currentRow.blockColor,
-          height: currentBlock.height || currentRow.blockHeight,
+          color: currentBlock.color || currentRow.color || this.options.color,
+          height: currentBlock.height || currentRow.height,
           id: currentBlock.id,
           link: currentBlock.link,
-          padding: currentBlock.padding || currentRow.blockPadding,
-          style: currentBlock.style || currentRow.blockStyle,
+          padding: this.calculateBlockPadding(i, rows.length, currentRow.padding, currentRow.blockPadding, j, currentRow.blocks.length, currentBlock.padding),
+          style: currentBlock.style || currentRow.style || this.options.style,
           text: currentBlock.text,
-          verticalAlign: currentBlock.verticalAlign || currentRow.blockVerticalAlign,
+          verticalAlign: currentBlock.verticalAlign || currentRow.verticalAlign || this.options.verticalAlign,
           width: currentBlock.width
         }
 
@@ -436,7 +433,15 @@ export default class TerminalDocument extends EventEmitter {
               fullBlock.color = newBlock.color === null ? null : newBlock.color || fullBlock.color
               fullBlock.height = newBlock.height === null ? null : newBlock.height || fullBlock.height
               fullBlock.link = newBlock.link === null ? null : newBlock.link || fullBlock.link
-              fullBlock.padding = newBlock.padding === null ? null : newBlock.padding || fullBlock.padding
+              fullBlock.padding = this.calculateBlockPadding(
+                i,
+                rows.length,
+                currentRow.padding,
+                currentRow.blockPadding,
+                j,
+                currentRow.blocks.length,
+                newBlock.padding === null ? null : newBlock.padding || fullBlock.padding
+              )
               fullBlock.style = newBlock.style === null ? null : newBlock.style || fullBlock.style
               fullBlock.text = newBlock.text || fullBlock.text
               fullBlock.verticalAlign = newBlock.verticalAlign === null ? null : newBlock.verticalAlign || fullBlock.verticalAlign
@@ -562,6 +567,18 @@ export default class TerminalDocument extends EventEmitter {
     return [topBorderStyle || 'single', rightBorderStyle || 'single', bottomBorderStyle || 'single', leftBorderStyle || 'single']
   }
 
+  private normalizeBorderStyle(borderStyle?: BorderStyle): SelectiveBorderStyle {
+    if (borderStyle) {
+      if (typeof borderStyle === 'string') {
+        return [borderStyle, borderStyle, borderStyle, borderStyle]
+      } else {
+        return [borderStyle[0], borderStyle[1], borderStyle[2], borderStyle[3]]
+      }
+    } else {
+      return [undefined, undefined, undefined, undefined]
+    }
+  }
+
   private calculateBlockBorderColor(
     rowIndex: number,
     rowCount: number,
@@ -601,18 +618,6 @@ export default class TerminalDocument extends EventEmitter {
     return [topBorderColor, rightBorderColor, bottomBorderColor, leftBorderColor]
   }
 
-  private normalizeBorderStyle(borderStyle?: BorderStyle): SelectiveBorderStyle {
-    if (borderStyle) {
-      if (typeof borderStyle === 'string') {
-        return [borderStyle, borderStyle, borderStyle, borderStyle]
-      } else {
-        return [borderStyle[0], borderStyle[1], borderStyle[2], borderStyle[3]]
-      }
-    } else {
-      return [undefined, undefined, undefined, undefined]
-    }
-  }
-
   private normalizeBorderColor(borderColor?: BorderColor): SelectiveBorderColor {
     if (borderColor) {
       if (typeof borderColor === 'string') {
@@ -622,6 +627,53 @@ export default class TerminalDocument extends EventEmitter {
       }
     } else {
       return [undefined, undefined, undefined, undefined]
+    }
+  }
+
+  private calculateBlockPadding(
+    rowIndex: number,
+    rowCount: number,
+    rowPadding: Padding,
+    rowBlockPadding: Padding,
+    blockIndex: number,
+    blockCount: number,
+    blockPadding: Padding
+  ): NumericSides {
+    const documentPadding = this.normalizePadding(this.options.padding)
+    const documentRowPadding = this.normalizePadding(this.options.rowPadding)
+    const documentBlockPadding = this.normalizePadding(this.options.blockPadding)
+    const rowPaddingNormalized = this.normalizePadding(rowPadding)
+    const rowBlockPaddingNormalized = this.normalizePadding(rowBlockPadding)
+    const blockPaddingNormalized = this.normalizePadding(blockPadding)
+
+    const topPaddingFromExplicitBlockPadding = blockPaddingNormalized[0] || rowBlockPaddingNormalized[0] || documentBlockPadding[0]
+    const topPaddingFromRowPadding = rowPaddingNormalized[0] || documentRowPadding[0]
+    const topPaddingFromDocumentPadding = rowIndex === 0 ? documentPadding[0] : 0
+    const topPadding = topPaddingFromExplicitBlockPadding || topPaddingFromRowPadding || topPaddingFromDocumentPadding
+
+    const rightPaddingFromExplicitBlockPadding = blockPaddingNormalized[1] || rowBlockPaddingNormalized[1] || documentBlockPadding[1]
+    const rightPaddingFromRowPadding = blockIndex === blockCount - 1 ? rowPaddingNormalized[1] || documentRowPadding[1] : 0
+    const rightPaddingFromDocumentPadding = blockIndex === blockCount - 1 ? documentPadding[1] : 0
+    const rightPadding = rightPaddingFromExplicitBlockPadding || rightPaddingFromRowPadding || rightPaddingFromDocumentPadding
+
+    const bottomPaddingFromExplicitBlockPadding = blockPaddingNormalized[2] || rowBlockPaddingNormalized[2] || documentBlockPadding[2]
+    const bottomPaddingFromRowPadding = rowPaddingNormalized[2] || documentRowPadding[2]
+    const bottomPaddingFromDocumentPadding = rowIndex === rowCount - 1 ? documentPadding[2] : 0
+    const bottomPadding = bottomPaddingFromExplicitBlockPadding || bottomPaddingFromRowPadding || bottomPaddingFromDocumentPadding
+
+    const leftPaddingFromExplicitBlockPadding = blockPaddingNormalized[3] || rowBlockPaddingNormalized[3] || documentBlockPadding[3]
+    const leftPaddingFromRowPadding = blockIndex === 0 ? rowPaddingNormalized[3] || documentRowPadding[3] : 0
+    const leftPaddingFromDocumentPadding = blockIndex === 0 ? documentPadding[3] : 0
+    const leftPadding = leftPaddingFromExplicitBlockPadding || leftPaddingFromRowPadding || leftPaddingFromDocumentPadding
+
+    return [topPadding, rightPadding, bottomPadding, leftPadding]
+  }
+
+  private normalizePadding(padding?: Padding): NumericSides {
+    if (padding) {
+      return normalizeNumericSides(padding)
+    } else {
+      return [0, 0, 0, 0]
     }
   }
 
