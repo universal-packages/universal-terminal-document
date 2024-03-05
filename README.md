@@ -4,7 +4,7 @@
 [![Testing](https://github.com/universal-packages/universal-terminal-document/actions/workflows/testing.yml/badge.svg)](https://github.com/universal-packages/universal-terminal-document/actions/workflows/testing.yml)
 [![codecov](https://codecov.io/gh/universal-packages/universal-terminal-document/branch/main/graph/badge.svg?token=CXPJSN8IGL)](https://codecov.io/gh/universal-packages/universal-terminal-document)
 
-Terminal structured document rendering
+Structured document rendering for the terminal.
 
 ## Install
 
