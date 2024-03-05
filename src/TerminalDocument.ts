@@ -1,7 +1,7 @@
-import { EventEmitter } from '@universal-packages/event-emitter'
 import { VerticalAlign, WrapTextOptions, WrappedLine, synthesizeWrappedLine, wrap } from '@universal-packages/text-wrap'
 import ansiScapes from 'ansi-escapes'
 import chalk from 'chalk'
+import EventEmitter from 'events'
 
 import {
   BOTTOM_JOIN,
@@ -51,6 +51,7 @@ export default class TerminalDocument extends EventEmitter {
   }
 
   private template: BlockDescriptor[][] = []
+  private templateGenerated = false
   private templateUpdaters: TemplateUpdaters = {}
   private internalOutput: string
   private documentWidth: number
@@ -60,7 +61,6 @@ export default class TerminalDocument extends EventEmitter {
 
     this.options = { context: {}, width: 80, ...options }
     this.documentWidth = this.options.width
-    this.generateTemplate()
   }
 
   public update(id: string, descriptor: Omit<Partial<BlockDescriptor>, 'id'>): void {
@@ -68,14 +68,18 @@ export default class TerminalDocument extends EventEmitter {
 
     if (updater) {
       updater(descriptor)
+      this.render()
     } else {
-      // Warning id not found
+      this.emit('warning', `An update was requested for a non-existent block with the ID "${id}"`)
     }
-
-    this.render()
   }
 
   public render(): void {
+    if (!this.templateGenerated) {
+      this.generateTemplate()
+      this.templateGenerated = true
+    }
+
     this.internalOutput = ''
 
     if (this.options.table) {
@@ -386,7 +390,7 @@ export default class TerminalDocument extends EventEmitter {
 
         if (fullBlock.id) {
           if (this.templateUpdaters[fullBlock.id]) {
-            // Warning same ID
+            this.emit('warning', `A block with the ID "${fullBlock.id}" already exists in the template`)
           } else {
             this.templateUpdaters[fullBlock.id] = (newBlock) => {
               fullBlock.align = newBlock.align === null ? null : newBlock.align || fullBlock.align
