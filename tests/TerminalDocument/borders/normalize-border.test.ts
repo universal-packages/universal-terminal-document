@@ -19,7 +19,7 @@ describe(TerminalDocument, () => {
 
     terminalDocument.render()
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 Some                
 multiple            
 text that           

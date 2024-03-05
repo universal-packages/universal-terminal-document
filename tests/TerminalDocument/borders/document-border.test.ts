@@ -19,7 +19,7 @@ describe(TerminalDocument, () => {
 
     terminalDocument.render()
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────────┐
 │This is aJust a   │
 │row      row      │

@@ -46,15 +46,16 @@ const DYNAMIC_BLOCK_MIN_WIDTH = 10
 export default class TerminalDocument extends EventEmitter {
   public readonly options: TerminalDocumentOptions
 
-  public get output(): string {
-    return this.internalOutput || ''
+  public get result(): string {
+    return this.renderedDocument || ''
   }
 
   private template: BlockDescriptor[][] = []
   private templateGenerated = false
   private templateUpdaters: TemplateUpdaters = {}
-  private internalOutput: string
   private documentWidth: number
+
+  private renderedDocument: string
 
   public constructor(options: TerminalDocumentOptions) {
     super()
@@ -63,24 +64,24 @@ export default class TerminalDocument extends EventEmitter {
     this.documentWidth = this.options.width
   }
 
-  public update(id: string, descriptor: Omit<Partial<BlockDescriptor>, 'id'>): void {
+  public update(id: string, descriptor: Omit<Partial<BlockDescriptor>, 'id'>): string {
     const updater = this.templateUpdaters[id]
 
     if (updater) {
       updater(descriptor)
-      this.render()
+      return this.render()
     } else {
       this.emit('warning', `An update was requested for a non-existent block with the ID "${id}"`)
     }
   }
 
-  public render(): void {
+  public render(): string {
     if (!this.templateGenerated) {
       this.generateTemplate()
       this.templateGenerated = true
     }
 
-    this.internalOutput = ''
+    this.renderedDocument = ''
 
     if (this.options.table) {
     } else {
@@ -91,13 +92,22 @@ export default class TerminalDocument extends EventEmitter {
         const previousWrappedBlocks = wrappedBlocks[i - 1]
         const topBorderLine = this.generateBorderLine(currentWrappedBlocks, previousWrappedBlocks)
 
-        this.internalOutput += topBorderLine ? topBorderLine + '\n' : ''
-        this.internalOutput += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n') + (i < wrappedBlocks.length - 1 ? '\n' : '')
+        this.renderedDocument += topBorderLine ? topBorderLine + '\n' : ''
+        this.renderedDocument += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n') + (i < wrappedBlocks.length - 1 ? '\n' : '')
       }
 
       const lastBorderLine = this.generateBorderLine(undefined, wrappedBlocks[wrappedBlocks.length - 1])
 
-      this.internalOutput += lastBorderLine ? '\n' + lastBorderLine : ''
+      this.renderedDocument += lastBorderLine ? '\n' + lastBorderLine : ''
+    }
+
+    return this.renderedDocument
+  }
+
+  public resize(width: number): string {
+    if (width !== this.documentWidth) {
+      this.documentWidth = width
+      return this.render()
     }
   }
 

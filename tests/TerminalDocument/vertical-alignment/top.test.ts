@@ -18,7 +18,7 @@ describe(TerminalDocument, () => {
 
     terminalDocument.render()
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────┬─────────────┐
 │Some multiple │Some other   │
 │text that is  │text         │
@@ -42,7 +42,7 @@ describe(TerminalDocument, () => {
 
     terminalDocument.render()
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────┬─────────────┐
 │Some multiple │Some other   │
 │text that is  │text         │

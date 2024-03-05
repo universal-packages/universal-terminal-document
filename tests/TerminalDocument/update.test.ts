@@ -20,18 +20,18 @@ describe(TerminalDocument, () => {
 
     terminalDocument.render()
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 This is a block     `)
 
     terminalDocument.update('block1', { text: 'This is an updated block' })
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 This is an updated  
 block               `)
 
     terminalDocument.update('block1', { padding: 1, border: true })
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────────┐
 │                  │
 │ This is an       │
@@ -41,7 +41,7 @@ block               `)
 
     terminalDocument.update('block1', { align: 'center' })
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────────┐
 │                  │
 │    This is an    │
@@ -51,7 +51,7 @@ block               `)
 
     terminalDocument.update('block1', { borderStyle: 'dash-2-thick' })
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┓
 ╏                  ╏
 ╏    This is an    ╏
@@ -62,9 +62,9 @@ block               `)
     terminalDocument.update('block1', { borderColor: 'red', borderStyle: 'double' })
 
     // Check visually
-    // console.log(terminalDocument.output)
+    // console.log(terminalDocument.result)
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ╔══════════════════╗
 ║                  ║
 ║    This is an    ║
@@ -75,9 +75,9 @@ block               `)
     terminalDocument.update('block1', { borderColor: 'green' })
 
     // Check visually
-    // console.log(terminalDocument.output)
+    // console.log(terminalDocument.result)
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ╔══════════════════╗
 ║                  ║
 ║    This is an    ║
@@ -88,9 +88,9 @@ block               `)
     terminalDocument.update('block1', { borderColor: null })
 
     // Check visually
-    // console.log(terminalDocument.output)
+    // console.log(terminalDocument.result)
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ╔══════════════════╗
 ║                  ║
 ║    This is an    ║
@@ -100,7 +100,7 @@ block               `)
 
     terminalDocument.update('block1', { borderStyle: ['dash-2-thick', 'double', 'dash-2', 'single'] })
 
-    expect('\n' + stripAnsi(terminalDocument.output)).toEqual(`
+    expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╗
 │                  ║
 │    This is an    ║

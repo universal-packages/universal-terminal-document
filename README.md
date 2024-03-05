@@ -14,6 +14,22 @@ npm install @universal-packages/terminal-document
 
 ## TerminalDocument
 
+By instantiating a `TerminalDocument` object, you can create a structured document that can be rendered to a string that can be printed to the terminal.
+
+```typescript
+import { TerminalDocument } from '@universal-packages/terminal-document'
+
+const document = new TerminalDocument({
+  rows: [
+    {
+      blocks: [{ text: 'Hello World!!' }]
+    }
+  ]
+})
+
+console.log(document.render())
+```
+
 ## Typescript
 
 This library is developed in TypeScript and shipped fully typed.
@@ -28,3 +44,7 @@ The development of this library happens in the open on GitHub, and we are gratef
 ### License
 
 [MIT licensed](./LICENSE).
+
+```
+
+```

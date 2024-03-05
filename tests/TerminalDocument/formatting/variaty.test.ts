@@ -10,11 +10,11 @@ describe(TerminalDocument, () => {
     terminalDocument.render()
 
     // Check visually the output
-    // console.log(terminalDocument.output)
-    // console.log(JSON.stringify(terminalDocument.output.split('\n')))
+    // console.log(terminalDocument.result)
+    // console.log(JSON.stringify(terminalDocument.result.split('\n')))
 
     if (process.env.CI) {
-      expect(stripAnsi(terminalDocument.output).split('\n')).toEqual([
+      expect(stripAnsi(terminalDocument.result).split('\n')).toEqual([
         '┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┓',
         '╏                                                                              ╏',
         '╏ Mjjm! Corre corre           No me podras atrapar            SOY EL HOMBRE DE ╏',
@@ -62,7 +62,7 @@ describe(TerminalDocument, () => {
         '┗╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┛'
       ])
     } else {
-      expect(terminalDocument.output.split('\n')).toEqual([
+      expect(terminalDocument.result.split('\n')).toEqual([
         '┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍┓',
         '╏                                                                              ╏',
         '╏ \u001b[38;2;127;255;212mMjjm! Corre corre\u001b[39m           \u001b[38;2;255;20;147mNo me podras atrapar\u001b[39m            \u001b[38;2;255;215;0mSOY EL HOMBRE DE\u001b[39m ╏',

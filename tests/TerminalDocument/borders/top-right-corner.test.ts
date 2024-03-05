@@ -115,7 +115,7 @@ describe(TerminalDocument, (): void => {
 
       terminalDocument.render()
 
-      expect('\n' + stripAnsi(terminalDocument.output)).toBe(currentCombination.result)
+      expect('\n' + stripAnsi(terminalDocument.result)).toBe(currentCombination.result)
     })
   }
 })
