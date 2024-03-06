@@ -52,7 +52,6 @@ export default class TerminalDocument extends EventEmitter {
   private descriptor: DocumentDescriptor
 
   private template: BlockDescriptor[][] = []
-  private templateGenerated = false
   private templateUpdaters: TemplateUpdaters = {}
   private documentWidth: number
 
@@ -62,6 +61,8 @@ export default class TerminalDocument extends EventEmitter {
   public describe(descriptor: DocumentDescriptor): string {
     this.descriptor = { width: 80, ...descriptor }
     this.documentWidth = this.descriptor.width
+
+    this.generateTemplate()
 
     return this.render()
   }
@@ -95,11 +96,6 @@ export default class TerminalDocument extends EventEmitter {
   }
 
   public render(): string {
-    if (!this.templateGenerated) {
-      this.generateTemplate()
-      this.templateGenerated = true
-    }
-
     this.renderedDocument = ''
 
     const wrappedBlocks: WrappedBlockDescriptor[][] = this.template.map((rowBlocks) => this.generateWrappedBlocks(rowBlocks))
@@ -398,6 +394,8 @@ export default class TerminalDocument extends EventEmitter {
   }
 
   private generateTemplate(): void {
+    this.template = []
+
     const { rows } = this.descriptor
 
     for (let i = 0; i < rows.length; i++) {
