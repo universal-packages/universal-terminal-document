@@ -5,9 +5,9 @@ import { FORMATTED_DOC } from '../../__fixtures__/formatted-doc'
 
 describe(TerminalDocument, () => {
   it('renders the document applying formatting', () => {
-    const terminalDocument = new TerminalDocument(FORMATTED_DOC)
+    const terminalDocument = new TerminalDocument()
 
-    terminalDocument.render()
+    terminalDocument.describe(FORMATTED_DOC)
 
     // Check visually the output
     // console.log(terminalDocument.result)

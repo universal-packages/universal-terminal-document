@@ -360,7 +360,9 @@ describe(TerminalDocument, (): void => {
     const currentCombination = COMBINATIONS[i]
 
     it(`renders the border combination [${i}]`, async (): Promise<void> => {
-      const terminalDocument = new TerminalDocument(
+      const terminalDocument = new TerminalDocument()
+
+      terminalDocument.describe(
         quadDocument([
           {
             border: [currentCombination.topTopLeftBorder, currentCombination.topCenterBorder, currentCombination.middleLeftBorder, currentCombination.topLeftBorder],
@@ -380,8 +382,6 @@ describe(TerminalDocument, (): void => {
           }
         ])
       )
-
-      terminalDocument.render()
 
       expect('\n' + stripAnsi(terminalDocument.result)).toBe(currentCombination.result)
     })

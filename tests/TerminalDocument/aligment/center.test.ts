@@ -4,7 +4,9 @@ import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('aligns text to the center', () => {
-    const terminalDocument = new TerminalDocument({
+    const terminalDocument = new TerminalDocument()
+
+    terminalDocument.describe({
       rows: [
         {
           blocks: [
@@ -15,8 +17,6 @@ describe(TerminalDocument, () => {
       ],
       width: 30
     })
-
-    terminalDocument.render()
 
     expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────┬─────────────┐

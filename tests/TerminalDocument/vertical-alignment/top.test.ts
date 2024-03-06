@@ -4,7 +4,9 @@ import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('vertically aligns text to the top by default', () => {
-    const terminalDocument = new TerminalDocument({
+    const terminalDocument = new TerminalDocument()
+
+    terminalDocument.describe({
       rows: [
         {
           blocks: [
@@ -16,8 +18,6 @@ describe(TerminalDocument, () => {
       width: 30
     })
 
-    terminalDocument.render()
-
     expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────┬─────────────┐
 │Some multiple │Some other   │
@@ -28,7 +28,9 @@ describe(TerminalDocument, () => {
   })
 
   it('vertically aligns text to the top', () => {
-    const terminalDocument = new TerminalDocument({
+    const terminalDocument = new TerminalDocument()
+
+    terminalDocument.describe({
       rows: [
         {
           blocks: [
@@ -39,8 +41,6 @@ describe(TerminalDocument, () => {
       ],
       width: 30
     })
-
-    terminalDocument.render()
 
     expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────┬─────────────┐

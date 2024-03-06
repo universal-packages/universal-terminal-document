@@ -51,14 +51,14 @@ describe(TerminalDocument, (): void => {
     const currentCombination = COMBINATIONS[i]
 
     it(`renders the join combination [${i}]`, async (): Promise<void> => {
-      const terminalDocument = new TerminalDocument(
+      const terminalDocument = new TerminalDocument()
+
+      terminalDocument.describe(
         rowDocument([
           { border: currentCombination.topBorder, borderStyle: 'double' },
           { border: currentCombination.bottomBorder, borderStyle: 'thick' }
         ])
       )
-
-      terminalDocument.render()
 
       expect('\n' + stripAnsi(terminalDocument.result)).toBe(currentCombination.result)
     })

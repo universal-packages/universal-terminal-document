@@ -1,6 +1,6 @@
-import { BlueColor, BrownColor, GrayColor, RedColor, TerminalDocumentOptions, WhiteColor } from '../../src'
+import { BlueColor, BrownColor, DocumentDescriptor, GrayColor, RedColor, WhiteColor } from '../../src'
 
-export const FORMATTED_DOC: TerminalDocumentOptions = {
+export const FORMATTED_DOC: DocumentDescriptor = {
   rows: [
     {
       blocks: [

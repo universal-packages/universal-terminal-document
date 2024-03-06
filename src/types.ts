@@ -12,7 +12,7 @@ export type SelectiveBorderStyle = [BorderType, BorderType, BorderType, BorderTy
 export type TextStyle = 'bold' | 'italic' | 'underline' | 'inverse' | 'strikethrough'
 export type With = number | 'fit'
 
-export interface TerminalDocumentOptions {
+export interface DocumentDescriptor {
   blockBorder?: Border
   blockBorderColor?: BorderColor
   blockBorderStyle?: BorderStyle
@@ -94,6 +94,13 @@ export interface BorderDescriptor {
 
 export interface TemplateUpdaters {
   [key: string]: (block: Omit<Partial<BlockDescriptor>, 'id'>) => void
+}
+
+export interface BlockSize {
+  fillHeight: number
+  fillWidth: number
+  height: number
+  width: number
 }
 
 export enum RedColor {

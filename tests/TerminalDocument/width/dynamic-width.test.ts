@@ -4,7 +4,9 @@ import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('gives the block part of the remaining width', () => {
-    const terminalDocument = new TerminalDocument({
+    const terminalDocument = new TerminalDocument()
+
+    terminalDocument.describe({
       rows: [
         {
           blocks: [
@@ -17,8 +19,6 @@ describe(TerminalDocument, () => {
       ],
       width: 30
     })
-
-    terminalDocument.render()
 
     expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌─────┬────────┬───────┬─────┐

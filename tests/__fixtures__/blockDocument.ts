@@ -1,8 +1,8 @@
-import { BlockDescriptor, TerminalDocumentOptions } from '../../src'
+import { BlockDescriptor, DocumentDescriptor } from '../../src'
 
 type BlockDescriptorWithOutText = Omit<BlockDescriptor, 'text'>
 
-export function blockDocument(blockDescriptor?: BlockDescriptorWithOutText, width = 20): TerminalDocumentOptions {
+export function blockDocument(blockDescriptor?: BlockDescriptorWithOutText, width = 20): DocumentDescriptor {
   if (!blockDescriptor) {
     return {
       rows: [{ blocks: [{ text: 'Hello World' }] }],

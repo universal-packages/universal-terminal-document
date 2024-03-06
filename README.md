@@ -19,7 +19,9 @@ By instantiating a `TerminalDocument` object, you can create a structured docume
 ```typescript
 import { TerminalDocument } from '@universal-packages/terminal-document'
 
-const document = new TerminalDocument({
+const document = new TerminalDocument()
+
+document.describe({
   rows: [
     {
       blocks: [{ text: 'Hello World!!' }]
@@ -27,12 +29,24 @@ const document = new TerminalDocument({
   ]
 })
 
-console.log(document.render())
+console.log(document.result)
 
 // Hello World!!
 ```
 
-### Options
+### Instance Properties
+
+#### `result` `string`
+
+The rendered document.
+
+### Instance Methods
+
+#### `describe(descriptor: Descriptor)`
+
+Sets the template that will be used to render the document.
+
+##### Descriptor
 
 - **`blockBorder`** `boolean | [boolean, boolean, boolean, boolean]`
   Whether to render a border around each block in the whole document. An array of 4 booleans can be provided to specify the border for each side of the block, top, right, bottom, left respectively.
@@ -179,17 +193,9 @@ console.log(document.render())
     - **`width`** `number | fit`
       The width of the block if not specified the block width will be calculated based on the document width and how many blocks are in the row. If the value is `fit` the block will take exactly the width of the longest line in th text.
 
-### Instance Properties
+#### `getBlockSize(id: string)`
 
-#### `result` `string`
-
-The rendered document.
-
-### Instance Methods
-
-#### `render()`
-
-Render the document to a string that can be printed to the terminal. The result will be stored in the `result` property.
+Gets the size of a single block after rendering.
 
 #### `update(id: string, block: Object)`
 
@@ -482,7 +488,3 @@ The development of this library happens in the open on GitHub, and we are gratef
 ### License
 
 [MIT licensed](./LICENSE).
-
-```
-
-```

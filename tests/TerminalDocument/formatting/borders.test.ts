@@ -4,7 +4,9 @@ import { BlueColor, PurpleColor, RedColor, TerminalDocument } from '../../../src
 
 describe(TerminalDocument, () => {
   it('renders borders with a formatting', () => {
-    const terminalDocument = new TerminalDocument({
+    const terminalDocument = new TerminalDocument()
+
+    terminalDocument.describe({
       rows: [
         {
           blocks: [
@@ -17,8 +19,6 @@ describe(TerminalDocument, () => {
       blockBorder: true,
       blockBorderStyle: 'dash-2-thick'
     })
-
-    terminalDocument.render()
 
     // Check visually the output
     // console.log(terminalDocument.result)

@@ -4,7 +4,9 @@ import { TerminalDocument } from '../../../src'
 
 describe(TerminalDocument, () => {
   it('wraps the document in borders without dividing blocks nor rows', () => {
-    const terminalDocument = new TerminalDocument({
+    const terminalDocument = new TerminalDocument()
+
+    terminalDocument.describe({
       rows: [
         {
           blocks: [{ text: 'This is a row' }, { text: 'Just a row' }]
@@ -16,8 +18,6 @@ describe(TerminalDocument, () => {
       border: true,
       width: 20
     })
-
-    terminalDocument.render()
 
     expect('\n' + stripAnsi(terminalDocument.result)).toEqual(`
 ┌──────────────────┐

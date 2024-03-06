@@ -29,39 +29,58 @@ import {
 import { COLORS } from './colors'
 import {
   BlockDescriptor,
+  BlockSize,
   Border,
   BorderColor,
   BorderStyle,
   Color,
+  DocumentDescriptor,
   SelectiveBorder,
   SelectiveBorderColor,
   SelectiveBorderStyle,
   TemplateUpdaters,
-  TerminalDocumentOptions,
   WrappedBlockDescriptor
 } from './types'
 
 const DYNAMIC_BLOCK_MIN_WIDTH = 10
 
 export default class TerminalDocument extends EventEmitter {
-  public readonly options: TerminalDocumentOptions
-
   public get result(): string {
     return this.renderedDocument || ''
   }
+
+  private descriptor: DocumentDescriptor
 
   private template: BlockDescriptor[][] = []
   private templateGenerated = false
   private templateUpdaters: TemplateUpdaters = {}
   private documentWidth: number
 
+  private wrappedBlocksById: Record<string, WrappedBlockDescriptor> = {}
   private renderedDocument: string
 
-  public constructor(options: TerminalDocumentOptions) {
-    super()
+  public describe(descriptor: DocumentDescriptor): string {
+    this.descriptor = { width: 80, ...descriptor }
+    this.documentWidth = this.descriptor.width
 
-    this.options = { width: 80, ...options }
-    this.documentWidth = this.options.width
+    return this.render()
+  }
+
+  public getBlockSize(id: string): BlockSize {
+    const wrappedBlock = this.wrappedBlocksById[id]
+
+    if (wrappedBlock) {
+      const fillBlocks = wrappedBlock.lines.filter((line) => line.leftFill || line.text || line.rightFill)
+
+      return {
+        fillHeight: fillBlocks.length,
+        fillWidth: fillBlocks[0].leftFill + fillBlocks[0].text.length + fillBlocks[0].rightFill,
+        height: wrappedBlock.lines.length,
+        width: wrappedBlock.width
+      }
+    } else {
+      this.emit('warning', `Size for a non-existent block with the ID "${id}" was requested`)
+    }
   }
 
   public update(id: string, descriptor: Omit<Partial<BlockDescriptor>, 'id'>): string {
@@ -85,10 +104,20 @@ export default class TerminalDocument extends EventEmitter {
 
     const wrappedBlocks: WrappedBlockDescriptor[][] = this.template.map((rowBlocks) => this.generateWrappedBlocks(rowBlocks))
 
+    this.wrappedBlocksById = {}
+
     for (let i = 0; i < wrappedBlocks.length; i++) {
       const currentWrappedBlocks = wrappedBlocks[i]
       const previousWrappedBlocks = wrappedBlocks[i - 1]
       const topBorderLine = this.generateBorderLine(currentWrappedBlocks, previousWrappedBlocks)
+
+      for (let j = 0; j < currentWrappedBlocks.length; j++) {
+        const currentWrappedBlock = currentWrappedBlocks[j]
+
+        if (currentWrappedBlock.block.id) {
+          this.wrappedBlocksById[currentWrappedBlock.block.id] = currentWrappedBlock
+        }
+      }
 
       this.renderedDocument += topBorderLine ? topBorderLine + '\n' : ''
       this.renderedDocument += this.synthesizeWrappedBlocks(currentWrappedBlocks).join('\n') + (i < wrappedBlocks.length - 1 ? '\n' : '')
@@ -369,7 +398,7 @@ export default class TerminalDocument extends EventEmitter {
   }
 
   private generateTemplate(): void {
-    const { rows } = this.options
+    const { rows } = this.descriptor
 
     for (let i = 0; i < rows.length; i++) {
       const currentRow = rows[i]
@@ -379,19 +408,19 @@ export default class TerminalDocument extends EventEmitter {
         const currentBlock = currentRow.blocks[j]
         const fullBlock: BlockDescriptor = {
           align: currentBlock.align || currentRow.align,
-          backgroundColor: currentBlock.backgroundColor || currentRow.backgroundColor || this.options.backgroundColor,
-          backgroundFill: currentBlock.backgroundFill || currentRow.backgroundFill || this.options.backgroundFill,
+          backgroundColor: currentBlock.backgroundColor || currentRow.backgroundColor || this.descriptor.backgroundColor,
+          backgroundFill: currentBlock.backgroundFill || currentRow.backgroundFill || this.descriptor.backgroundFill,
           border: this.calculateBlockBorder(i, rows.length, currentRow.border, currentRow.blockBorder, j, currentRow.blocks.length, currentBlock.border),
           borderColor: this.calculateBlockBorderColor(i, rows.length, currentRow.borderColor, currentRow.blockBorderColor, j, currentRow.blocks.length, currentBlock.borderColor),
           borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, currentBlock.borderStyle),
-          color: currentBlock.color || currentRow.color || this.options.color,
+          color: currentBlock.color || currentRow.color || this.descriptor.color,
           height: currentBlock.height || currentRow.height,
           id: currentBlock.id,
           link: currentBlock.link,
           padding: this.calculateBlockPadding(i, rows.length, currentRow.padding, currentRow.blockPadding, j, currentRow.blocks.length, currentBlock.padding),
-          style: currentBlock.style || currentRow.style || this.options.style,
+          style: currentBlock.style || currentRow.style || this.descriptor.style,
           text: currentBlock.text,
-          verticalAlign: currentBlock.verticalAlign || currentRow.verticalAlign || this.options.verticalAlign,
+          verticalAlign: currentBlock.verticalAlign || currentRow.verticalAlign || this.descriptor.verticalAlign,
           width: currentBlock.width
         }
 
@@ -486,9 +515,9 @@ export default class TerminalDocument extends EventEmitter {
     blockCount: number,
     blockBorder: Border
   ): SelectiveBorder {
-    const documentBorder = this.normalizeBorder(this.options.border)
-    const documentRowBorder = this.normalizeBorder(this.options.rowBorder)
-    const documentBlockBorder = this.normalizeBorder(this.options.blockBorder)
+    const documentBorder = this.normalizeBorder(this.descriptor.border)
+    const documentRowBorder = this.normalizeBorder(this.descriptor.rowBorder)
+    const documentBlockBorder = this.normalizeBorder(this.descriptor.blockBorder)
     const rowBorderNormalized = this.normalizeBorder(rowBorder)
     const rowBlockBorderNormalized = this.normalizeBorder(rowBlockBorder)
     const blockBorderNormalized = this.normalizeBorder(blockBorder)
@@ -537,9 +566,9 @@ export default class TerminalDocument extends EventEmitter {
     blockCount: number,
     blockBorderStyle: BorderStyle
   ): SelectiveBorderStyle {
-    const documentBorderStyle = this.normalizeBorderStyle(this.options.borderStyle)
-    const documentRowBorderStyle = this.normalizeBorderStyle(this.options.rowBorderStyle)
-    const documentBlockBorderStyle = this.normalizeBorderStyle(this.options.blockBorderStyle)
+    const documentBorderStyle = this.normalizeBorderStyle(this.descriptor.borderStyle)
+    const documentRowBorderStyle = this.normalizeBorderStyle(this.descriptor.rowBorderStyle)
+    const documentBlockBorderStyle = this.normalizeBorderStyle(this.descriptor.blockBorderStyle)
     const rowBorderStyleNormalized = this.normalizeBorderStyle(rowBorderStyle)
     const rowBlockBorderStyleNormalized = this.normalizeBorderStyle(rowBlockBorderStyle)
     const blockBorderStyleNormalized = this.normalizeBorderStyle(blockBorderStyle)
@@ -588,9 +617,9 @@ export default class TerminalDocument extends EventEmitter {
     blockCount: number,
     blockBorderColor: BorderColor
   ): SelectiveBorderColor {
-    const documentBorderColor = this.normalizeBorderColor(this.options.borderColor)
-    const documentRowBorderColor = this.normalizeBorderColor(this.options.rowBorderColor)
-    const documentBlockBorderColor = this.normalizeBorderColor(this.options.blockBorderColor)
+    const documentBorderColor = this.normalizeBorderColor(this.descriptor.borderColor)
+    const documentRowBorderColor = this.normalizeBorderColor(this.descriptor.rowBorderColor)
+    const documentBlockBorderColor = this.normalizeBorderColor(this.descriptor.blockBorderColor)
     const rowBorderColorNormalized = this.normalizeBorderColor(rowBorderColor)
     const rowBlockBorderColorNormalized = this.normalizeBorderColor(rowBlockBorderColor)
     const blockBorderColorNormalized = this.normalizeBorderColor(blockBorderColor)
@@ -639,9 +668,9 @@ export default class TerminalDocument extends EventEmitter {
     blockCount: number,
     blockPadding: Padding
   ): NumericSides {
-    const documentPadding = this.normalizePadding(this.options.padding)
-    const documentRowPadding = this.normalizePadding(this.options.rowPadding)
-    const documentBlockPadding = this.normalizePadding(this.options.blockPadding)
+    const documentPadding = this.normalizePadding(this.descriptor.padding)
+    const documentRowPadding = this.normalizePadding(this.descriptor.rowPadding)
+    const documentBlockPadding = this.normalizePadding(this.descriptor.blockPadding)
     const rowPaddingNormalized = this.normalizePadding(rowPadding)
     const rowBlockPaddingNormalized = this.normalizePadding(rowBlockPadding)
     const blockPaddingNormalized = this.normalizePadding(blockPadding)
