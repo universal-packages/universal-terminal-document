@@ -395,6 +395,7 @@ export default class TerminalDocument extends EventEmitter {
 
   private generateTemplate(): void {
     this.template = []
+    this.templateUpdaters = {}
 
     const { rows } = this.descriptor
 
