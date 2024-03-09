@@ -200,6 +200,8 @@ export default class TerminalDocument extends EventEmitter {
 
   private synthesizeWrappedBlocks(wrappedBlocks: WrappedBlockDescriptor[]): string[] {
     const lines = Array(wrappedBlocks[0].lines.length).fill('')
+    const byBlocksWidth = wrappedBlocks.reduce((acc, wb) => acc + wb.width, 0)
+    const verticalBorderSpots = Array(wrappedBlocks[0].lines.length).fill(0)
 
     for (let i = 0; i < wrappedBlocks.length; i++) {
       const currentWrappedBlock = wrappedBlocks[i]
@@ -213,6 +215,7 @@ export default class TerminalDocument extends EventEmitter {
             VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[3]]],
             currentWrappedBlock.block.borderColor?.[3] as Color
           )
+          verticalBorderSpots[j]++
         }
 
         lines[j] += this.synthesizeWrappedLine(currentWrappedLine, currentWrappedBlock.block)
@@ -222,18 +225,20 @@ export default class TerminalDocument extends EventEmitter {
             VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[currentWrappedBlock.block.borderStyle[1]]],
             currentWrappedBlock.block.borderColor?.[1] as Color
           )
+          verticalBorderSpots[j]++
         } else if (nextWrappedBlock?.block.border[3]) {
           lines[j] += this.applyBorderColor(
             VERTICAL_BORDERS_RECTIFICATION_MAP[VERTICAL_BORDERS[nextWrappedBlock.block.borderStyle[3]]],
             nextWrappedBlock.block.borderColor?.[3] as Color
           )
+          verticalBorderSpots[j]++
         }
       }
     }
 
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].length < this.documentWidth) {
-        lines[i] += ' '.repeat(this.documentWidth - lines[i].length)
+    if (byBlocksWidth < this.documentWidth) {
+      for (let i = 0; i < lines.length; i++) {
+        lines[i] += ' '.repeat(this.documentWidth - byBlocksWidth - verticalBorderSpots[i])
       }
     }
 
