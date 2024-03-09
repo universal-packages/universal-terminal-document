@@ -39,6 +39,7 @@ import {
   SelectiveBorderColor,
   SelectiveBorderStyle,
   TemplateUpdaters,
+  Width,
   WrappedBlockDescriptor
 } from './types'
 
@@ -155,6 +156,11 @@ export default class TerminalDocument extends EventEmitter {
         const lines = wrap(currentBlock.text, { ...baseWrapOptions, width: currentBlock.width })
 
         wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
+      } else if (typeof currentBlock.width === 'string') {
+        const percentageWidth = Math.round((this.documentWidth / 100) * parseInt(currentBlock.width))
+        const lines = wrap(currentBlock.text, { ...baseWrapOptions, width: percentageWidth })
+
+        wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
       } else {
         wrappedBlocks.push({ block: currentBlock, lines: [], width: 0 })
       }
@@ -162,11 +168,18 @@ export default class TerminalDocument extends EventEmitter {
 
     const fixedWidthTotal = wrappedBlocks.filter((wp) => typeof wp.block.width === 'number').reduce((acc, wb) => acc + synthesizeWrappedLine(wb.lines[0]).length, 0)
     const fitWidthTotal = wrappedBlocks.filter((wp) => wp.block.width === 'fit').reduce((acc, wb) => acc + synthesizeWrappedLine(wb.lines[0]).length, 0)
+    const percentageWidthTotal = wrappedBlocks
+      .filter((wp) => typeof wp.block.width === 'string' && wp.block.width !== 'fit')
+      .reduce((acc, wb) => acc + Math.round((this.documentWidth / 100) * parseInt(wb.block.width as string)), 0)
     const horizontalBorderWidth = this.getHorizontalBorderCountNeeded(rowBlocks)
     const dynamicWidthBlocksCount = rowBlocks.filter((b) => b.width === undefined).length
-    const remainingWidth = Math.max(this.documentWidth - fixedWidthTotal - fitWidthTotal - horizontalBorderWidth, 0) || dynamicWidthBlocksCount * DYNAMIC_BLOCK_MIN_WIDTH
+    const remainingWidth =
+      Math.max(this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth, 0) || dynamicWidthBlocksCount * DYNAMIC_BLOCK_MIN_WIDTH
     const dynamicWidth = Math.floor(remainingWidth / dynamicWidthBlocksCount)
-    let dynamicWidthToGive = this.documentWidth - fixedWidthTotal - fitWidthTotal - horizontalBorderWidth - dynamicWidthBlocksCount * dynamicWidth
+    let dynamicWidthToGive = Math.max(
+      this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth - dynamicWidthBlocksCount * dynamicWidth,
+      0
+    )
 
     for (let i = 0; i < wrappedBlocks.length; i++) {
       const currentWrappedBlock = wrappedBlocks[i]
@@ -425,7 +438,7 @@ export default class TerminalDocument extends EventEmitter {
           style: currentBlock.style || currentRow.style || this.descriptor.style,
           text: currentBlock.text,
           verticalAlign: currentBlock.verticalAlign || currentRow.verticalAlign || this.descriptor.verticalAlign,
-          width: currentBlock.width
+          width: this.normalizeWidth(currentBlock.width)
         }
 
         if (fullBlock.id) {
@@ -478,7 +491,7 @@ export default class TerminalDocument extends EventEmitter {
               fullBlock.style = newBlock.style === null ? null : newBlock.style || fullBlock.style
               fullBlock.text = newBlock.text || fullBlock.text
               fullBlock.verticalAlign = newBlock.verticalAlign === null ? null : newBlock.verticalAlign || fullBlock.verticalAlign
-              fullBlock.width = newBlock.width === null ? null : newBlock.width || fullBlock.width
+              fullBlock.width = newBlock.width === null ? null : this.normalizeWidth(newBlock.width) || fullBlock.width
             }
           }
         }
@@ -487,6 +500,17 @@ export default class TerminalDocument extends EventEmitter {
       }
 
       this.template.push(templateBlocks)
+    }
+  }
+
+  private normalizeWidth(width: Width): Width {
+    if (width === 'fit') return width
+    if (typeof width === 'number') return width
+    if (typeof width === 'string') {
+      const percentageMatch = width.match(/^(\d+)%$/)
+      const percentage = percentageMatch ? percentageMatch[1] : undefined
+
+      return percentage
     }
   }
 

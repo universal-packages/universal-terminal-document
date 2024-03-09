@@ -190,8 +190,8 @@ Sets the template that will be used to render the document.
     - **`verticalAlign`** `top | middle | bottom`
       The vertical alignment of the block.
 
-    - **`width`** `number | fit`
-      The width of the block if not specified the block width will be calculated based on the document width and how many blocks are in the row. If the value is `fit` the block will take exactly the width of the longest line in th text.
+    - **`width`** `number | fit | string`
+      The width of the block if not specified the block width will be calculated based on the document width and how many blocks are in the row. If the value is `fit` the block will take exactly the width of the longest line in th text. You cal also provide a percentage value as a string, for example `50%` and the block will take that percentage of the document width.
 
 #### `getBlockSize(id: string)`
 

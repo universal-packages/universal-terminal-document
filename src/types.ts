@@ -10,7 +10,7 @@ export type SelectiveBorder = [boolean, boolean, boolean, boolean]
 export type SelectiveBorderColor = [Color, Color, Color, Color]
 export type SelectiveBorderStyle = [BorderType, BorderType, BorderType, BorderType]
 export type TextStyle = 'bold' | 'italic' | 'underline' | 'inverse' | 'strikethrough'
-export type With = number | 'fit'
+export type Width = number | 'fit' | string
 
 export interface DocumentDescriptor {
   blockBorder?: Border
@@ -69,7 +69,7 @@ export interface BlockDescriptor {
   style?: TextStyle | TextStyle[]
   text: string
   verticalAlign?: VerticalAlign
-  width?: With
+  width?: Width
 }
 
 export interface WrappedBlockDescriptor {
