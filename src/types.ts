@@ -9,7 +9,7 @@ export type Color = RedColors | PinkColors | OrangeColors | YellowColors | Purpl
 export type SelectiveBorder = [boolean, boolean, boolean, boolean]
 export type SelectiveBorderColor = [Color, Color, Color, Color]
 export type SelectiveBorderStyle = [BorderType, BorderType, BorderType, BorderType]
-export type TextStyle = 'bold' | 'italic' | 'underline' | 'inverse' | 'strikethrough'
+export type TextStyle = 'bold' | 'italic' | 'underline' | 'inverse' | 'strikethrough' | 'dim'
 export type Width = number | 'fit' | string
 
 export interface DocumentDescriptor {
