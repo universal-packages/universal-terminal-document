@@ -31,6 +31,7 @@ describe(TerminalDocument, () => {
               border: true
             },
             {
+              border: true,
               align: 'center',
               text: 'This is a free block text it can be text that was previously formatted and should be rendered as it is.\nThis way we can render a block of text that is not formatted by the terminal document and wrapping will be delegated to the terminal.',
               free: true
@@ -49,6 +50,7 @@ describe(TerminalDocument, () => {
 │    │                       │
 └────┴───────────────────────┘
 This is a free block text it can be text that was previously formatted and should be rendered as it is.
-This way we can render a block of text that is not formatted by the terminal document and wrapping will be delegated to the terminal.`)
+This way we can render a block of text that is not formatted by the terminal document and wrapping will be delegated to the terminal.
+──────────────────────────────`)
   })
 })

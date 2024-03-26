@@ -140,9 +140,9 @@ export default class TerminalDocument extends EventEmitter {
     if (freeBlock) {
       return [
         {
-          block: { border: [false, false, false, false], padding: [0, 0, 0, 0], free: true, text: freeBlock.text },
+          block: { ...freeBlock, border: [freeBlock.border[0], false, freeBlock.border[2], false], padding: [0, 0, 0, 0] },
           lines: [{ leftFill: 0, leftMargin: 0, leftPadding: 0, rightFill: 0, rightMargin: 0, rightPadding: 0, text: freeBlock.text }],
-          width: freeBlock.text.length
+          width: this.documentWidth
         }
       ]
     } else {
