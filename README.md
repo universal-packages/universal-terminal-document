@@ -170,6 +170,9 @@ Sets the template that will be used to render the document.
     - **`color`** `string`
       The color of all text in the block. See [Colors](#colors).
 
+    - **`free`** `boolean`
+      When a free block is included in a row, only that block will be considered and its text will be rendered as it is without any document styling. Useful to render text previously formatted that the terminal itself can handle.
+
     - **`height`** `number`
       The height of the block.
 
@@ -407,7 +410,6 @@ Valid string values for colors are the following:
 | deep-sky-blue     | $${\color{deepskyblue}██████}$$     |
 | dodger-blue       | $${\color{dodgerblue}██████}$$      |
 | cornflower-blue   | $${\color{cornflowerblue}██████}$$  |
-| medium-slate-blue | $${\color{mediumslateblue}██████}$$ |
 | royal-blue        | $${\color{royalblue}██████}$$       |
 | blue              | $${\color{blue}██████}$$            |
 | medium-blue       | $${\color{mediumblue}██████}$$      |

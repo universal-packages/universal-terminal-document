@@ -62,6 +62,7 @@ export interface BlockDescriptor {
   borderColor?: BorderColor
   borderStyle?: BorderStyle
   color?: Color
+  free?: boolean
   height?: number
   id?: string
   link?: string
@@ -214,7 +215,6 @@ export enum BlueColor {
   DeepSkyBlue = 'deep-sky-blue',
   DodgerBlue = 'dodger-blue',
   CornflowerBlue = 'cornflower-blue',
-  MediumSlateBlue = 'medium-slate-blue',
   RoyalBlue = 'royal-blue',
   Blue = 'blue',
   MediumBlue = 'medium-blue',

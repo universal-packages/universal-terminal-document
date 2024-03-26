@@ -135,80 +135,92 @@ export default class TerminalDocument extends EventEmitter {
   }
 
   private generateWrappedBlocks(rowBlocks: BlockDescriptor[]): WrappedBlockDescriptor[] {
-    const wrappedBlocks: WrappedBlockDescriptor[] = []
+    const freeBlock = rowBlocks.find((b) => b.free)
 
-    for (let i = 0; i < rowBlocks.length; i++) {
-      const currentBlock = rowBlocks[i]
-      const baseWrapOptions: WrapTextOptions = {
-        align: currentBlock.align,
-        fillBlock: true,
-        height: currentBlock.height,
-        hyphenate: 'word',
-        padding: currentBlock.padding,
-        verticalAlign: currentBlock.verticalAlign
+    if (freeBlock) {
+      return [
+        {
+          block: { border: [false, false, false, false], padding: [0, 0, 0, 0], free: true, text: freeBlock.text },
+          lines: [{ leftFill: 0, leftMargin: 0, leftPadding: 0, rightFill: 0, rightMargin: 0, rightPadding: 0, text: freeBlock.text }],
+          width: freeBlock.text.length
+        }
+      ]
+    } else {
+      const wrappedBlocks: WrappedBlockDescriptor[] = []
+
+      for (let i = 0; i < rowBlocks.length; i++) {
+        const currentBlock = rowBlocks[i]
+        const baseWrapOptions: WrapTextOptions = {
+          align: currentBlock.align,
+          fillBlock: true,
+          height: currentBlock.height,
+          hyphenate: 'word',
+          padding: currentBlock.padding,
+          verticalAlign: currentBlock.verticalAlign
+        }
+
+        if (currentBlock.width === 'fit') {
+          const lines = wrap(currentBlock.text, baseWrapOptions)
+
+          wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
+        } else if (typeof currentBlock.width === 'number') {
+          const lines = wrap(currentBlock.text, { ...baseWrapOptions, width: currentBlock.width })
+
+          wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
+        } else if (typeof currentBlock.width === 'string') {
+          const percentageWidth = Math.round((this.documentWidth / 100) * parseInt(currentBlock.width))
+          const lines = wrap(currentBlock.text, { ...baseWrapOptions, width: percentageWidth })
+
+          wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
+        } else {
+          wrappedBlocks.push({ block: currentBlock, lines: [], width: 0 })
+        }
       }
 
-      if (currentBlock.width === 'fit') {
-        const lines = wrap(currentBlock.text, baseWrapOptions)
+      const fixedWidthTotal = wrappedBlocks.filter((wp) => typeof wp.block.width === 'number').reduce((acc, wb) => acc + synthesizeWrappedLine(wb.lines[0]).length, 0)
+      const fitWidthTotal = wrappedBlocks.filter((wp) => wp.block.width === 'fit').reduce((acc, wb) => acc + synthesizeWrappedLine(wb.lines[0]).length, 0)
+      const percentageWidthTotal = wrappedBlocks
+        .filter((wp) => typeof wp.block.width === 'string' && wp.block.width !== 'fit')
+        .reduce((acc, wb) => acc + Math.round((this.documentWidth / 100) * parseInt(wb.block.width as string)), 0)
+      const horizontalBorderWidth = this.getHorizontalBorderCountNeeded(rowBlocks)
+      const dynamicWidthBlocksCount = rowBlocks.filter((b) => b.width === undefined).length
+      const remainingWidth =
+        Math.max(this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth, 0) || dynamicWidthBlocksCount * DYNAMIC_BLOCK_MIN_WIDTH
+      const dynamicWidth = Math.floor(remainingWidth / dynamicWidthBlocksCount)
+      let dynamicWidthToGive = Math.max(
+        this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth - dynamicWidthBlocksCount * dynamicWidth,
+        0
+      )
 
-        wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
-      } else if (typeof currentBlock.width === 'number') {
-        const lines = wrap(currentBlock.text, { ...baseWrapOptions, width: currentBlock.width })
+      for (let i = 0; i < wrappedBlocks.length; i++) {
+        const currentWrappedBlock = wrappedBlocks[i]
+        const baseWrapOptions: WrapTextOptions = {
+          align: currentWrappedBlock.block.align,
+          height: currentWrappedBlock.block.height,
+          fillBlock: true,
+          hyphenate: 'word',
+          padding: currentWrappedBlock.block.padding,
+          verticalAlign: currentWrappedBlock.block.verticalAlign
+        }
 
-        wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
-      } else if (typeof currentBlock.width === 'string') {
-        const percentageWidth = Math.round((this.documentWidth / 100) * parseInt(currentBlock.width))
-        const lines = wrap(currentBlock.text, { ...baseWrapOptions, width: percentageWidth })
-
-        wrappedBlocks.push({ block: currentBlock, lines, width: synthesizeWrappedLine(lines[0]).length })
-      } else {
-        wrappedBlocks.push({ block: currentBlock, lines: [], width: 0 })
+        if (currentWrappedBlock.block.width === undefined) {
+          currentWrappedBlock.lines = wrap(currentWrappedBlock.block.text, { ...baseWrapOptions, width: dynamicWidth + (dynamicWidthToGive ? dynamicWidthToGive-- : 0) })
+          currentWrappedBlock.width = synthesizeWrappedLine(currentWrappedBlock.lines[0]).length
+        }
       }
+
+      const maxHigh = wrappedBlocks.reduce((acc, wb) => Math.max(acc, wb.lines.length), 0)
+
+      for (let i = 0; i < wrappedBlocks.length; i++) {
+        const currentWrappedBlock = wrappedBlocks[i]
+
+        if (currentWrappedBlock.lines.length < maxHigh) {
+          this.fillHeight(currentWrappedBlock.lines, maxHigh, currentWrappedBlock.block.verticalAlign)
+        }
+      }
+
+      return wrappedBlocks
     }
-
-    const fixedWidthTotal = wrappedBlocks.filter((wp) => typeof wp.block.width === 'number').reduce((acc, wb) => acc + synthesizeWrappedLine(wb.lines[0]).length, 0)
-    const fitWidthTotal = wrappedBlocks.filter((wp) => wp.block.width === 'fit').reduce((acc, wb) => acc + synthesizeWrappedLine(wb.lines[0]).length, 0)
-    const percentageWidthTotal = wrappedBlocks
-      .filter((wp) => typeof wp.block.width === 'string' && wp.block.width !== 'fit')
-      .reduce((acc, wb) => acc + Math.round((this.documentWidth / 100) * parseInt(wb.block.width as string)), 0)
-    const horizontalBorderWidth = this.getHorizontalBorderCountNeeded(rowBlocks)
-    const dynamicWidthBlocksCount = rowBlocks.filter((b) => b.width === undefined).length
-    const remainingWidth =
-      Math.max(this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth, 0) || dynamicWidthBlocksCount * DYNAMIC_BLOCK_MIN_WIDTH
-    const dynamicWidth = Math.floor(remainingWidth / dynamicWidthBlocksCount)
-    let dynamicWidthToGive = Math.max(
-      this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth - dynamicWidthBlocksCount * dynamicWidth,
-      0
-    )
-
-    for (let i = 0; i < wrappedBlocks.length; i++) {
-      const currentWrappedBlock = wrappedBlocks[i]
-      const baseWrapOptions: WrapTextOptions = {
-        align: currentWrappedBlock.block.align,
-        height: currentWrappedBlock.block.height,
-        fillBlock: true,
-        hyphenate: 'word',
-        padding: currentWrappedBlock.block.padding,
-        verticalAlign: currentWrappedBlock.block.verticalAlign
-      }
-
-      if (currentWrappedBlock.block.width === undefined) {
-        currentWrappedBlock.lines = wrap(currentWrappedBlock.block.text, { ...baseWrapOptions, width: dynamicWidth + (dynamicWidthToGive ? dynamicWidthToGive-- : 0) })
-        currentWrappedBlock.width = synthesizeWrappedLine(currentWrappedBlock.lines[0]).length
-      }
-    }
-
-    const maxHigh = wrappedBlocks.reduce((acc, wb) => Math.max(acc, wb.lines.length), 0)
-
-    for (let i = 0; i < wrappedBlocks.length; i++) {
-      const currentWrappedBlock = wrappedBlocks[i]
-
-      if (currentWrappedBlock.lines.length < maxHigh) {
-        this.fillHeight(currentWrappedBlock.lines, maxHigh, currentWrappedBlock.block.verticalAlign)
-      }
-    }
-
-    return wrappedBlocks
   }
 
   private synthesizeWrappedBlocks(wrappedBlocks: WrappedBlockDescriptor[]): string[] {
@@ -431,6 +443,7 @@ export default class TerminalDocument extends EventEmitter {
           borderColor: this.calculateBlockBorderColor(i, rows.length, currentRow.borderColor, currentRow.blockBorderColor, j, currentRow.blocks.length, currentBlock.borderColor),
           borderStyle: this.calculateBlockBorderStyle(i, rows.length, currentRow.borderStyle, currentRow.borderStyle, j, currentRow.blocks.length, currentBlock.borderStyle),
           color: currentBlock.color || currentRow.color || this.descriptor.color,
+          free: currentBlock.free,
           height: currentBlock.height || currentRow.height,
           id: currentBlock.id,
           link: currentBlock.link,
@@ -477,6 +490,7 @@ export default class TerminalDocument extends EventEmitter {
                 newBlock.borderStyle === null ? null : newBlock.borderStyle || fullBlock.borderStyle
               )
               fullBlock.color = newBlock.color === null ? null : newBlock.color || fullBlock.color
+              fullBlock.free = newBlock.free === null ? null : newBlock.free || fullBlock.free
               fullBlock.height = newBlock.height === null ? null : newBlock.height || fullBlock.height
               fullBlock.link = newBlock.link === null ? null : newBlock.link || fullBlock.link
               fullBlock.padding = this.calculateBlockPadding(
