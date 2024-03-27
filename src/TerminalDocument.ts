@@ -186,6 +186,7 @@ export default class TerminalDocument extends EventEmitter {
       const dynamicWidthBlocksCount = rowBlocks.filter((b) => b.width === undefined).length
       const remainingWidth =
         Math.max(this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth, 0) || dynamicWidthBlocksCount * DYNAMIC_BLOCK_MIN_WIDTH
+
       const dynamicWidth = Math.floor(remainingWidth / dynamicWidthBlocksCount)
       let dynamicWidthToGive = Math.max(
         this.documentWidth - fixedWidthTotal - percentageWidthTotal - fitWidthTotal - horizontalBorderWidth - dynamicWidthBlocksCount * dynamicWidth,
@@ -204,7 +205,7 @@ export default class TerminalDocument extends EventEmitter {
         }
 
         if (currentWrappedBlock.block.width === undefined) {
-          currentWrappedBlock.lines = wrap(currentWrappedBlock.block.text, { ...baseWrapOptions, width: dynamicWidth + (dynamicWidthToGive ? dynamicWidthToGive-- : 0) })
+          currentWrappedBlock.lines = wrap(currentWrappedBlock.block.text, { ...baseWrapOptions, width: dynamicWidth + (dynamicWidthToGive-- > 0 ? 1 : 0) })
           currentWrappedBlock.width = synthesizeWrappedLine(currentWrappedBlock.lines[0]).length
         }
       }
